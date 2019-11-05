@@ -11,6 +11,7 @@
 		9F3D523B2370CAA800B8FAC0 /* splashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3D523A2370CAA800B8FAC0 /* splashScreenViewController.swift */; };
 		9F3D523E2370E4CF00B8FAC0 /* loginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3D523D2370E4CF00B8FAC0 /* loginViewController.swift */; };
 		9F3D52402370E4DA00B8FAC0 /* createAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3D523F2370E4DA00B8FAC0 /* createAccountViewController.swift */; };
+		9F440120237140B5007FBBF7 /* tabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F44011F237140B5007FBBF7 /* tabViewController.swift */; };
 		9F972545236FE99700616E7D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F972544236FE99700616E7D /* AppDelegate.swift */; };
 		9F972547236FE99700616E7D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F972546236FE99700616E7D /* SceneDelegate.swift */; };
 		9F972549236FE99700616E7D /* mindViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F972548236FE99700616E7D /* mindViewController.swift */; };
@@ -30,6 +31,7 @@
 		9F3D523A2370CAA800B8FAC0 /* splashScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = splashScreenViewController.swift; sourceTree = "<group>"; };
 		9F3D523D2370E4CF00B8FAC0 /* loginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loginViewController.swift; sourceTree = "<group>"; };
 		9F3D523F2370E4DA00B8FAC0 /* createAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createAccountViewController.swift; sourceTree = "<group>"; };
+		9F44011F237140B5007FBBF7 /* tabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tabViewController.swift; sourceTree = "<group>"; };
 		9F972541236FE99700616E7D /* lifeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = lifeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F972544236FE99700616E7D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9F972546236FE99700616E7D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +89,26 @@
 			path = Authentication;
 			sourceTree = "<group>";
 		};
+		9F3D52412370F8C700B8FAC0 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				9F972544236FE99700616E7D /* AppDelegate.swift */,
+				9F972546236FE99700616E7D /* SceneDelegate.swift */,
+				9F97254C236FE99700616E7D /* Main.storyboard */,
+				9F972551236FE99900616E7D /* LaunchScreen.storyboard */,
+				9F97254F236FE99900616E7D /* Assets.xcassets */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		9F44011E2371409F007FBBF7 /* Structure */ = {
+			isa = PBXGroup;
+			children = (
+				9F44011F237140B5007FBBF7 /* tabViewController.swift */,
+			);
+			path = Structure;
+			sourceTree = "<group>";
+		};
 		9F972538236FE99700616E7D = {
 			isa = PBXGroup;
 			children = (
@@ -108,15 +130,11 @@
 		9F972543236FE99700616E7D /* lifeApp */ = {
 			isa = PBXGroup;
 			children = (
+				9F972554236FE99900616E7D /* Info.plist */,
 				9FA8B1222370AA8E0005DDCA /* GoogleService-Info.plist */,
+				9F3D52412370F8C700B8FAC0 /* Support */,
 				9F97255B236FE9D800616E7D /* Modals */,
 				9F97255A236FE9C500616E7D /* View Controllers */,
-				9F972544236FE99700616E7D /* AppDelegate.swift */,
-				9F972546236FE99700616E7D /* SceneDelegate.swift */,
-				9F97254C236FE99700616E7D /* Main.storyboard */,
-				9F97254F236FE99900616E7D /* Assets.xcassets */,
-				9F972551236FE99900616E7D /* LaunchScreen.storyboard */,
-				9F972554236FE99900616E7D /* Info.plist */,
 			);
 			path = lifeApp;
 			sourceTree = "<group>";
@@ -124,6 +142,7 @@
 		9F97255A236FE9C500616E7D /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				9F44011E2371409F007FBBF7 /* Structure */,
 				9F3D523C2370D5B200B8FAC0 /* Authentication */,
 				9F972548236FE99700616E7D /* mindViewController.swift */,
 				9F97254A236FE99700616E7D /* scheduleViewController.swift */,
@@ -262,6 +281,7 @@
 				9F97254B236FE99700616E7D /* scheduleViewController.swift in Sources */,
 				9F972549236FE99700616E7D /* mindViewController.swift in Sources */,
 				9F972561236FFD7900616E7D /* task.swift in Sources */,
+				9F440120237140B5007FBBF7 /* tabViewController.swift in Sources */,
 				9F3D523E2370E4CF00B8FAC0 /* loginViewController.swift in Sources */,
 				9F972545236FE99700616E7D /* AppDelegate.swift in Sources */,
 				9F3D52402370E4DA00B8FAC0 /* createAccountViewController.swift in Sources */,

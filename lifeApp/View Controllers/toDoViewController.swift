@@ -15,6 +15,7 @@ class toDoViewController: UIViewController {
     @IBOutlet weak var weekTableView: UITableView! //Bottom
     
     var tasks: Array<task> = []
+    var userUID = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
