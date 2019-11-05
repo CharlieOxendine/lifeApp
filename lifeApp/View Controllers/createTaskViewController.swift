@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 class createTaskViewController: UIViewController {
 
@@ -29,7 +30,7 @@ class createTaskViewController: UIViewController {
     }
     
     @IBAction func dueDateValueSwitched(_ sender: Any) {
-        if dueTodaySwitch.isOn == true {
+        if dueTodaySwitch.isOn == false {
             UIView.animate(withDuration: 0.5) {
                 self.datePicker.center.x += 1000
             }
