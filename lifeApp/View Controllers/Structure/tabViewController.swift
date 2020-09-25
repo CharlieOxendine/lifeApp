@@ -14,6 +14,12 @@ class tabViewController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("Parent: \(userUID)")
     }
-
+    
+    func data() -> String {
+        return userUID
+    }
 }
+
+

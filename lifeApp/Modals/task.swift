@@ -7,19 +7,31 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
-class task {
-    var userUID = ""
-    var dateCreated: Date = Date()
-    var title = ""
-    var notes = ""
-    var dueDate: Date = Date()
+class task: Codable {
+    var dateCreated: Timestamp!
+    var title: String!
+    var notes: String?
+    var dueDate: Timestamp!
+    var completed: Bool!
+    var id: String!
     
-    init(uid: String, date: Date, title: String, notes: String, dueDate: Date) {
-        self.userUID = uid
+    init(date: Timestamp, title: String, notes: String, dueDate: Timestamp, completed: Bool, id: String) {
         self.dateCreated = date
         self.title = title
         self.notes = notes
         self.dueDate = dueDate
+        self.completed = completed
+        self.id = id
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case dateCreated
+        case title
+        case notes
+        case dueDate
+        case completed
+        case id
     }
 }

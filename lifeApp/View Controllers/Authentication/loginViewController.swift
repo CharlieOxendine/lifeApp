@@ -15,7 +15,6 @@ class loginViewController: UIViewController {
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var submitButton: UIButton!
-    @IBOutlet weak var errorLabel: UILabel!
     
     var currentUserUID = ""
     override func viewDidLoad() {
@@ -24,21 +23,15 @@ class loginViewController: UIViewController {
     }
     
     func formatView() {
+        Utilities.styleTextField(emailField)
+        Utilities.styleTextField(passwordField)
         
-    }
-
-    @IBAction func submitButtonPressed(_ sender: Any) {
-        
-        //Segue to next View Controller
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let newVC = storyboard.instantiateViewController(withIdentifier: "tabBarControl")
-        newVC.modalPresentationStyle = .fullScreen
-        self.present(newVC, animated: true)
+        self.submitButton.layer.cornerRadius = 15
     }
     
     func validateFields() -> String? {
-        var email = emailField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-        var password = passwordField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let email = emailField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let password = passwordField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
         
         if email == "" || password == "" {
             return "Please fill in all fields."
@@ -49,31 +42,31 @@ class loginViewController: UIViewController {
     
     @IBAction func submitButtonClicked(_ sender: Any) {
         let validate = validateFields()
-        print(validate)
+
         if validate == nil {
             //Authenticate
             let auth = Auth.auth()
-            var email = emailField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-            var password = passwordField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-            let signIn = auth.signIn(withEmail: email!, password: password!) { (authData, err) in
+            let email = emailField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+            let password = passwordField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            auth.signIn(withEmail: email!, password: password!) { (authData, err) in
                 if err != nil {
-                    print("Error: \(err!)")
-                    self.errorLabel.text = err! as! String
+                    print("Error loggin in user: \(err!)")
+                    Utilities.errMessage(message: err!.localizedDescription, view: self)
                 } else {
-                    print("Signed In")
+                
                     self.currentUserUID = (authData?.user.uid)!
+                    let userUID = self.currentUserUID
+                    _userServices.shared.setUser(vc: self, uid: userUID) {
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let newVC = storyboard.instantiateViewController(identifier: "tabBarControl") as! tabViewController
+                        newVC.userUID = self.currentUserUID
+                        self.present(newVC, animated: true)
+                    }
                 }
             }
-            //Segue
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let newVC = storyboard.instantiateViewController(withIdentifier: "tabBarControl") as! tabViewController
-            newVC.userUID = ""
-            newVC.modalPresentationStyle = .fullScreen
-            self.present(newVC, animated: true)
         } else {
-            errorLabel.text = validate
-            errorLabel.alpha = 1
+            Utilities.errMessage(message: validate!, view: self)
         }
     }
-    
 }

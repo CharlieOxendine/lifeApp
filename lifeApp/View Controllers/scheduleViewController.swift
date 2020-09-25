@@ -10,13 +10,20 @@ import UIKit
 
 class scheduleViewController: UIViewController {
 
+    // MARK: Properties
+    var userUID = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        var parent = self.parent as! tabViewController
+        var uid = parent.data()
+        self.userUID = uid
+        
         formatView()
     }
 
     func formatView() {
-        print("formatted view...")
+        
     }
     
     

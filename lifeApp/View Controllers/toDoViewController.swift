@@ -7,72 +7,228 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 class toDoViewController: UIViewController {
 
+    // MARK: - Properties
     @IBOutlet weak var addTaskButton: UIButton!
     @IBOutlet weak var todayTableView: UITableView! //Top
     @IBOutlet weak var weekTableView: UITableView! //Bottom
     
-    var tasks: Array<task> = []
-    var userUID = ""
+    var tasks: [ task ] = []
+    var todayTasks: [ task ] = []
     
+    var count1 = 0
+    var count2 = 0
+    
+    // MARK: - View Did Load
     override func viewDidLoad() {
+        
+        self.tasks.removeAll()
+        self.todayTasks.removeAll()
+        
+        let parent = self.parent as! tabViewController
+        
+        getTasks()
+        
         super.viewDidLoad()
+        
+        //Set Delegates and DataSources for Table Views
         todayTableView.delegate = self
         todayTableView.dataSource = self
         weekTableView.delegate = self
         weekTableView.dataSource = self
     }
-
+    
+    func getTasks() {
+        _userServices.shared.currentUser.getTasks { (success) in
+            if success == true {
+                
+                self.tasks = []
+                self.todayTasks = []
+                
+                let today = Date()
+                let weekFromNow = today.advanced(by: TimeInterval(604800))
+               
+                for task in _userServices.shared.currentUser.tasks {
+                    
+                    let dueDate = task.dueDate.dateValue()
+                    
+                    if (Calendar.current.isDateInToday(task.dueDate.dateValue())) {
+                        self.todayTasks.append(task)
+                    } else if dueDate <= weekFromNow {
+                        self.tasks.append(task)
+                    }
+                }
+                
+                self.weekTableView.reloadData()
+                self.todayTableView.reloadData()
+            }
+        }
+    }
+    
     func formatView() {
         print("formatted view...")
     }
     
-    @objc func printValue(notification:NSNotification) {
-        let userInfo:Dictionary<String,String> = notification.userInfo as! Dictionary<String,String>
-        let item = userInfo["value"]! as String
-
-        print(item,self)
-    }
-    
-    func formatDate(date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .none
-        let dateString = dateFormatter.string(from: date)
-        return dateString
-    }
-    @IBAction func addTaskClicked(_ sender: Any) {
+    @IBAction func newTaskTapped(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let newVC = storyboard.instantiateViewController(withIdentifier: "createTask")
+        let newVC = storyboard.instantiateViewController(withIdentifier: "newTask") as! newTaskViewController
+        newVC.delegate = self
         self.present(newVC, animated: true)
     }
+    
 }
 
-extension toDoViewController: UITableViewDelegate, UITableViewDataSource {
+
+// MARK: - Extension
+extension toDoViewController: UITableViewDelegate, UITableViewDataSource, taskTableViewCellDelegate {
+    
+    func reloadData() {
+        self.getTasks()
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        if tableView == todayTableView {
+            return todayTasks.count
+        } else if tableView == weekTableView {
+            return tasks.count
+        } else {
+            return 0
+        }
     }
     
+    // MARK: Cell for row at
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "task", for: indexPath) as! taskTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "task") as! taskTableViewCell
+        
+        cell.delegate = self
         
         //add data for TOP TABLE VIEW CELL
         if tableView == todayTableView {
-            var time = Date()
-            var dateString = formatDate(date: time)
-            cell.currentDateLabel.text = dateString
-            cell.titleLabel.text = "HEHEEEE"
+            cell.setCell(task: self.todayTasks[indexPath.row])
             return cell
-        
         //add data for BOTTOM TABLE VIEW CELL
+        } else if tableView == weekTableView {
+            cell.setCell(task: self.tasks[indexPath.row])
+            return cell
         } else {
-            var time = Date()
-            var dateString = formatDate(date: time)
-            cell.weekDateLabel.text = dateString
-            cell.weekTitleLabel.text = "EHLLLOAJWD"
             return cell
         }
     }
+    
+    // MARK: Did select row
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        return
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 65
+    }
+    
+    // MARK: Swipe Buttons on Table Cell
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        if tableView == weekTableView {
+            let currentTask = self.tasks[indexPath.row]
+            let detailView = UIContextualAction(style: .destructive, title: "Details") { (action, sourceView, completionHandler) in
+                let currentTask: task!
+                if tableView == self.todayTableView {
+                    currentTask = self.todayTasks[indexPath.row]
+                } else {
+                    currentTask = self.tasks[indexPath.row]
+                }
+                
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let newVC = storyboard.instantiateViewController(withIdentifier: "taskDetail") as! taskDetailViewController
+                newVC.delegate = self
+                newVC.currentTaskID = currentTask.id
+                self.present(newVC, animated: true, completion: nil)
+            }
+          
+            let deleteAction = UIContextualAction(style: .normal, title: "Delete") { (action, sourceView, completionHandler) in
+                let alert = UIAlertController(title: "Are you sure?", message: "Are you sure you want to delete this task?", preferredStyle: .alert)
+                let yes = UIAlertAction(title: "Delete", style: .default) { (action) in
+                    firestoreTaskServices.shared.deleteTask(taskID: currentTask.id!) { (err) in
+                        if err != nil {
+                            Utilities.errMessage(message: err!, view: self)
+                            return
+                        }
+                        
+                        self.getTasks()
+                    }
+                }
+                
+                let no = UIAlertAction(title: "No", style: .default)
+                
+                alert.addAction(yes)
+                alert.addAction(no)
+                self.present(alert, animated: true)
+            }
+            
+            deleteAction.backgroundColor = .red
+            detailView.backgroundColor = .darkGray
+            
+            let swipeActionConfig = UISwipeActionsConfiguration(actions: [detailView, deleteAction])
+            swipeActionConfig.performsFirstActionWithFullSwipe = false
+            return swipeActionConfig
+        } else {
+            
+            let currentTask = self.todayTasks[indexPath.row]
+            let detailView = UIContextualAction(style: .destructive, title: "Details") { (action, sourceView, completionHandler) in
+                let currentTask: task!
+                if tableView == self.todayTableView {
+                    currentTask = self.todayTasks[indexPath.row]
+                } else {
+                    currentTask = self.tasks[indexPath.row]
+                }
+                
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let newVC = storyboard.instantiateViewController(withIdentifier: "taskDetail") as! taskDetailViewController
+                newVC.delegate = self
+                newVC.currentTaskID = currentTask.id
+                self.present(newVC, animated: true, completion: nil)
+            }
+            
+            let deleteAction = UIContextualAction(style: .normal, title: "Delete") { (action, sourceView, completionHandler) in
+                let alert = UIAlertController(title: "Are you sure?", message: "Are you sure you want to delete this task?", preferredStyle: .alert)
+                let yes = UIAlertAction(title: "Delete", style: .default) { (action) in
+                    firestoreTaskServices.shared.deleteTask(taskID: currentTask.id!) { (err) in
+                        if err != nil {
+                            Utilities.errMessage(message: err!, view: self)
+                            return
+                        }
+                        
+                        self.getTasks()
+                    }
+                }
+                
+                let no = UIAlertAction(title: "No", style: .default)
+                
+                alert.addAction(yes)
+                alert.addAction(no)
+                self.present(alert, animated: true)
+            }
+            
+            deleteAction.backgroundColor = .red
+            detailView.backgroundColor = .darkGray
+            
+            let swipeActionConfig = UISwipeActionsConfiguration(actions: [detailView, deleteAction])
+            swipeActionConfig.performsFirstActionWithFullSwipe = false
+            return swipeActionConfig
+            
+        }
+    }
+}
+
+extension toDoViewController: taskDetailViewControllerDelegate, newTaskViewControllerDelegate {
+    func viewClosed() {
+        self.getTasks()
+    }
+    
+    func didCloseView() {
+        self.getTasks()
+    }
+
 }

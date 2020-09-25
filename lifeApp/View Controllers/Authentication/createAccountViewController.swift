@@ -17,57 +17,68 @@ class createAccountViewController: UIViewController {
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var passwordVerifyField: UITextField!
     @IBOutlet weak var submitButton: UIButton!
-    @IBOutlet weak var errorLabel: UILabel!
-    
-    var userUID = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(userUID)
+        formatView()
+    }
+    
+    func formatView() {
+        Utilities.styleTextField(nameField)
+        Utilities.styleTextField(emailField)
+        Utilities.styleTextField(passwordField)
+        Utilities.styleTextField(passwordVerifyField)
+        
+        self.submitButton.layer.cornerRadius = 15
     }
     
     func validateFields() -> String? {
-        var name = nameField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-        var email = emailField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-        var password = passwordField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-        var passwordVerify = passwordVerifyField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let name = nameField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let email = emailField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let password = passwordField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let passwordVerify = passwordVerifyField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
         
         if name == "" || email == "" || password == "" || passwordVerify == "" {
             return "Please fill in all fields."
         } else if password != passwordVerify {
             return "Your passwords don't match."
+        } else if Utilities.isPasswordValid(password!) != true {
+            return "Make sure your password is at least 8 characters with a special character and a capitalized letter!"
         } else {
             return nil
         }
     }
 
     @IBAction func createAccountButtonTouched(_ sender: Any) {
-        var password = passwordField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-        var email = emailField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-        var name = nameField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        let password = passwordField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let email = emailField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let name = nameField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
         let validate = validateFields()
-        print(validate)
+
         if validate == nil {
             //authenticate
-            var auth = Auth.auth()
+            let auth = Auth.auth()
             auth.createUser(withEmail: email!, password: password!) { (authData, err) in
                 if err != nil {
-                    print("Error: \(err)")
+                    Utilities.errMessage(message: err!.localizedDescription, view: self)
+                    return
                 } else {
-                    self.userUID = (authData?.user.uid)!
-                    let db = Firestore.firestore()
-                    let ref = db.collection("users").document(self.userUID).setData(["email" : email!, "name" : name!])
+                    let uid = (authData?.user.uid)!
                     
-                    //segue
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let newVC = storyboard.instantiateViewController(withIdentifier: "tabBarControl")
-                    newVC.modalPresentationStyle = .fullScreen
-                    self.present(newVC, animated: true)
+                    let db = Firestore.firestore()
+                    db.collection("users").document(uid).setData(["email" : email!, "name" : name!])
+                    
+                    _userServices.shared.setUser(vc: self, uid: uid) {
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let newVC = storyboard.instantiateViewController(identifier: "tabBarControl") as! tabViewController
+                        newVC.userUID = authData!.user.uid
+                        self.present(newVC, animated: true)
+                    }
                 }
             }
         } else {
-            errorLabel.text = validate
-            errorLabel.alpha = 1
+            Utilities.errMessage(message: validate!, view: self)
         }
     }
 }
