@@ -33,6 +33,9 @@ class mindViewController: UIViewController {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         
+        self.newsTable.delegate = self
+        self.newsTable.dataSource = self
+        
         getWeatherData()
         getNewsData()
         formatView()
@@ -120,6 +123,9 @@ class mindViewController: UIViewController {
         newsServices.shared.getTopStories(vc: self) { (stories) in
             if stories != nil {
                 self.topStories = stories!
+                DispatchQueue.main.async {
+                    self.newsTable.reloadData()
+                }
             }
         }
     }
@@ -135,6 +141,35 @@ extension mindViewController: CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         self.currentLoc = manager.location
         getWeatherData()
+    }
+    
+}
+
+extension mindViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.topStories.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "newsStory") as? newsStoryTableViewCell
+        let currentStory = self.topStories[indexPath.row]
+        cell?.setCell(story: currentStory)
+        return cell!
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 150
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let currentStory = self.topStories[indexPath.row]
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let newVC = storyboard.instantiateViewController(identifier: "webView") as! webViewController
+        newVC.webURL = currentStory.urlToArticle as URL?
+        self.present(newVC, animated: true)
     }
     
 }
