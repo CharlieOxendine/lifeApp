@@ -15,15 +15,18 @@ class mindViewController: UIViewController {
     @IBOutlet weak var currentDateLabel: UILabel!
     @IBOutlet weak var greeting: UILabel!
     @IBOutlet weak var todayAtGlanceTable: UITableView!
-    @IBOutlet weak var bigGoalsTable: UITableView!
     @IBOutlet weak var newsTable: UITableView!
     @IBOutlet weak var tempLabel: UILabel!
     @IBOutlet weak var yourCityLabel: UILabel!
     @IBOutlet weak var weatherIMG: UIImageView!
+    @IBOutlet weak var settingsButton: UIButton!
     
     var currentLoc: CLLocation?
     var locationManager: CLLocationManager!
     var topStories: [newsStoryObject] = []
+    
+    var todayTasks: [task] = []
+    var dayEvents: [Event] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,10 +38,66 @@ class mindViewController: UIViewController {
         
         self.newsTable.delegate = self
         self.newsTable.dataSource = self
+              
+        self.todayAtGlanceTable.dataSource = self
+        self.todayAtGlanceTable.delegate = self
+        
+        setDayAtGlance()
         
         getWeatherData()
         getNewsData()
         formatView()
+        setTheme()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        setTheme()
+        self.setDayAtGlance()
+    }
+    
+    func setTheme() {
+        switch _userServices.shared.currentUser.themeColor {
+        case 0:
+            self.weatherIMG.tintColor = themeUIColor().darkGray
+            self.settingsButton.tintColor = themeUIColor().darkGray
+        case 1:
+            self.weatherIMG.tintColor = themeUIColor().pinkRed
+            self.settingsButton.tintColor = themeUIColor().pinkRed
+        case 2:
+            self.weatherIMG.tintColor = themeUIColor().green
+            self.settingsButton.tintColor = themeUIColor().green
+        case 3:
+            self.weatherIMG.tintColor = themeUIColor().blue
+            self.settingsButton.tintColor = themeUIColor().blue
+        case 4:
+            self.weatherIMG.tintColor = themeUIColor().banana
+            self.settingsButton.tintColor = themeUIColor().banana
+        case 5:
+            self.weatherIMG.tintColor = themeUIColor().darkTeal
+            self.settingsButton.tintColor = themeUIColor().darkTeal
+        default:
+            self.weatherIMG.tintColor = themeUIColor().darkGray
+            self.settingsButton.tintColor = themeUIColor().darkGray
+        }
+    }
+    
+    func setDayAtGlance() {
+        let today = Date()
+        let calanderDate = Calendar.current.dateComponents([.day, .year, .month], from: today)
+        let month = calanderDate.month
+        let year = calanderDate.year
+        let day = calanderDate.day
+        
+        firestoreTaskServices.shared.getEventsInMonth(vc: self, month: month! - 1, year: year!) { (events) in
+            self.dayEvents = _userServices.shared.currentUser.todayEvents
+            self.todayTasks = _userServices.shared.currentUser.tasks.filter { Calendar.current.compare(Date(), to: $0.dueDate.dateValue(), toGranularity: .day) == ComparisonResult.orderedSame }
+            
+            self.todayAtGlanceTable.reloadData()
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.setTheme()
     }
     
     func formatView() {
@@ -51,18 +110,6 @@ class mindViewController: UIViewController {
         let dateString = Utilities.formatDate(date: currentDate)
         currentDateLabel.text = "Today's Date: \(dateString)"
         
-        //Set UI
-        self.newsTable.layer.cornerRadius = 15
-        self.newsTable.layer.borderWidth = 1
-        self.newsTable.layer.borderColor = UIColor.darkGray.cgColor
-        
-        self.todayAtGlanceTable.layer.cornerRadius = 15
-        self.todayAtGlanceTable.layer.borderWidth = 1
-        self.todayAtGlanceTable.layer.borderColor = UIColor.darkGray.cgColor
-        
-        self.bigGoalsTable.layer.cornerRadius = 15
-        self.bigGoalsTable.layer.borderWidth = 1
-        self.bigGoalsTable.layer.borderColor = UIColor.darkGray.cgColor
     }
     
     func getWeatherData() {
@@ -129,6 +176,14 @@ class mindViewController: UIViewController {
             }
         }
     }
+    
+    @IBAction func settingsTapped(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let newVC = storyboard.instantiateViewController(withIdentifier: "settings") as! settingsViewController
+        newVC.delegate = self
+        self.present(newVC, animated: true)
+    }
+    
 }
 
 extension mindViewController: CLLocationManagerDelegate {
@@ -148,28 +203,131 @@ extension mindViewController: CLLocationManagerDelegate {
 extension mindViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.topStories.count
+        if tableView == self.newsTable {
+            return self.topStories.count
+        } else {
+            return Int(self.todayTasks.count + self.dayEvents.count)
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "newsStory") as? newsStoryTableViewCell
-        let currentStory = self.topStories[indexPath.row]
-        cell?.setCell(story: currentStory)
-        return cell!
+        
+        if tableView == self.newsTable {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "newsStory") as? newsStoryTableViewCell
+            let currentStory = self.topStories[indexPath.row]
+            cell?.setCell(story: currentStory)
+            return cell!
+        } else {
+            if indexPath.row < self.dayEvents.count {
+                let currentDayEvent = self.dayEvents[indexPath.row]
+                let cell = tableView.dequeueReusableCell(withIdentifier: "eventCell") as? eventTableViewCell
+                cell?.setCell(event: currentDayEvent)
+                return cell!
+            } else {
+                let index = indexPath.row - self.dayEvents.count
+                let currentDayTask = self.todayTasks[index]
+                let cell = tableView.dequeueReusableCell(withIdentifier: "task") as? taskTableViewCell
+                cell?.setCell(task: currentDayTask)
+                return cell!
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 150
+        if tableView == self.newsTable {
+            return 150
+        } else {
+            if indexPath.row < self.dayEvents.count {
+                return 80
+            } else {
+                return 65
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let currentStory = self.topStories[indexPath.row]
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let newVC = storyboard.instantiateViewController(identifier: "webView") as! webViewController
-        newVC.webURL = currentStory.urlToArticle as URL?
-        self.present(newVC, animated: true)
+        if tableView == self.newsTable {
+            let currentStory = self.topStories[indexPath.row]
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let newVC = storyboard.instantiateViewController(identifier: "webView") as! webViewController
+            newVC.webURL = currentStory.urlToArticle as URL?
+            self.present(newVC, animated: true)
+        } else {
+            if indexPath.row < self.dayEvents.count {
+                let currentDayEvents = self.dayEvents[indexPath.row]
+            } else {
+                let index = indexPath.row - self.dayEvents.count
+                let currentDayTasks = self.todayTasks[index]
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        if tableView == self.newsTable {
+            return nil
+        } else {
+            if indexPath.row < self.dayEvents.count {
+                let currentDayEvents = self.dayEvents[indexPath.row]
+            } else {
+                let detailView = UIContextualAction(style: .destructive, title: "Details") { (action, sourceView, completionHandler) in
+                    let index = indexPath.row - self.dayEvents.count
+                    let currentTask = self.todayTasks[index]
+                    
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let newVC = storyboard.instantiateViewController(withIdentifier: "taskDetail") as! taskDetailViewController
+                    newVC.delegate = self
+                    newVC.currentTaskID = currentTask.id
+                    self.present(newVC, animated: true, completion: nil)
+                }
+                
+                let deleteAction = UIContextualAction(style: .normal, title: "Delete") { (action, sourceView, completionHandler) in
+                    let alert = UIAlertController(title: "Are you sure?", message: "Are you sure you want to delete this task?", preferredStyle: .alert)
+                    let yes = UIAlertAction(title: "Delete", style: .default) { (action) in
+                        let index = indexPath.row - self.dayEvents.count
+                        let currentTask = self.todayTasks[index]
+                        firestoreTaskServices.shared.deleteTask(taskID: currentTask.id!) { (err) in
+                            if err != nil {
+                                Utilities.errMessage(message: err!, view: self)
+                                return
+                            }
+                            
+                            self.setDayAtGlance()
+                        }
+                    }
+                    
+                    let no = UIAlertAction(title: "No", style: .default)
+                    
+                    alert.addAction(yes)
+                    alert.addAction(no)
+                    self.present(alert, animated: true)
+                }
+                
+                deleteAction.backgroundColor = .red
+                detailView.backgroundColor = .darkGray
+                
+                let swipeActionConfig = UISwipeActionsConfiguration(actions: [detailView, deleteAction])
+                swipeActionConfig.performsFirstActionWithFullSwipe = false
+                return swipeActionConfig
+            }
+        }
+        
+        return nil
+    }
+}
+
+extension mindViewController: settingsViewControllerDelegate, taskDetailViewControllerDelegate {
+    
+    func didCloseView() {
+        self.setDayAtGlance()
+    }
+    
+    
+    func updatedThemeColor() {
+        self.setTheme()
     }
     
 }
+
+

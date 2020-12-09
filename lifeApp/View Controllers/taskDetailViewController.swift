@@ -28,6 +28,7 @@ class taskDetailViewController: UIViewController {
         
         self.notesField.delegate = self
         
+        getTask()
         setUI()
     }
 
@@ -37,6 +38,35 @@ class taskDetailViewController: UIViewController {
         self.notesField.layer.cornerRadius = 15
         self.notesField.layer.borderWidth = 1
         self.notesField.layer.borderColor = UIColor.darkGray.cgColor
+        
+    }
+    
+    func getTask() {
+        let db = Firestore.firestore()
+        
+        db.collection("users").document(_userServices.shared.currentUser.uid).collection("tasks").document(self.currentTaskID!).getDocument { (snap, err) in
+            if err != nil {
+                Utilities.errMessage(message: err!.localizedDescription, view: self)
+                return
+            }
+            
+            let result = Result {
+                try snap!.data(as: task.self)
+            }
+            
+            switch result {
+                case .success(let task):
+                    if let task = task {
+                        self.taskTitleLbl.text = task.title
+                        self.timeSinceAddedLbl.text = "\(task.dueDate.dateValue().timeAgo()) ago"
+                        self.notesField.text = task.notes
+                    } else {
+                        print("Document does not exist")
+                    }
+                case .failure(let error):
+                    print("Error decoding city: \(error)")
+            }
+        }
     }
     
     func updateTaskNote(newField: String) {

@@ -54,6 +54,26 @@ class taskTableViewCell: UITableViewCell {
         
         }
         
+        setTheme()
+    }
+    
+    func setTheme() {
+        switch _userServices.shared.currentUser.themeColor {
+        case 0:
+            self.markCompleteIndicator.tintColor = themeUIColor().darkGray
+        case 1:
+            self.markCompleteIndicator.tintColor = themeUIColor().pinkRed
+        case 2:
+            self.markCompleteIndicator.tintColor = themeUIColor().green
+        case 3:
+            self.markCompleteIndicator.tintColor = themeUIColor().blue
+        case 4:
+            self.markCompleteIndicator.tintColor = themeUIColor().banana
+        case 5:
+            self.markCompleteIndicator.tintColor = themeUIColor().darkTeal
+        default:
+            self.markCompleteIndicator.tintColor = themeUIColor().darkGray
+        }
     }
     
     func getDateSince(dateDue: Date) -> String {

@@ -27,11 +27,8 @@ class toDoViewController: UIViewController {
         
         self.tasks.removeAll()
         self.todayTasks.removeAll()
-        
-        let parent = self.parent as! tabViewController
-        
+    
         getTasks()
-        
         super.viewDidLoad()
         
         //Set Delegates and DataSources for Table Views
@@ -39,6 +36,12 @@ class toDoViewController: UIViewController {
         todayTableView.dataSource = self
         weekTableView.delegate = self
         weekTableView.dataSource = self
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.weekTableView.reloadData()
+        self.todayTableView.reloadData()
     }
     
     func getTasks() {
@@ -66,10 +69,6 @@ class toDoViewController: UIViewController {
                 self.todayTableView.reloadData()
             }
         }
-    }
-    
-    func formatView() {
-        print("formatted view...")
     }
     
     @IBAction func newTaskTapped(_ sender: Any) {

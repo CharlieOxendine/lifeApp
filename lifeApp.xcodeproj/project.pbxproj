@@ -30,10 +30,15 @@
 		9FA8B12123707B260005DDCA /* createTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA8B12023707B260005DDCA /* createTaskViewController.swift */; };
 		9FA8B1232370AA8E0005DDCA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9FA8B1222370AA8E0005DDCA /* GoogleService-Info.plist */; };
 		9FBC3A1B2378EB5100976713 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBC3A1A2378EB5100976713 /* Utilities.swift */; };
+		9FCE4A8C2522E91A00260063 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCE4A8B2522E91A00260063 /* Event.swift */; };
+		9FCE4AAA252376AD00260063 /* eventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCE4AA9252376AD00260063 /* eventTableViewCell.swift */; };
+		9FCE4AAD2524378E00260063 /* settingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCE4AAC2524378E00260063 /* settingsViewController.swift */; };
+		9FDB1B2B25815B8A00C4F996 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDB1B2A25815B8A00C4F996 /* Constants.swift */; };
 		9FE592A6251D523800C8CC5D /* newsServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE592A5251D523800C8CC5D /* newsServices.swift */; };
 		9FE592A9251E84BF00C8CC5D /* newsStoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE592A8251E84BF00C8CC5D /* newsStoryTableViewCell.swift */; };
 		9FE592C7252122FD00C8CC5D /* webViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE592C6252122FD00C8CC5D /* webViewController.swift */; };
 		9FE592CA25213DFB00C8CC5D /* dateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE592C925213DFB00C8CC5D /* dateCollectionViewCell.swift */; };
+		9FE592CD252190E500C8CC5D /* newEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE592CC252190E500C8CC5D /* newEventViewController.swift */; };
 		9FFE549A23BFF890004554EA /* userServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FFE549923BFF890004554EA /* userServices.swift */; };
 		9FFE549C23BFF899004554EA /* user.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FFE549B23BFF899004554EA /* user.swift */; };
 /* End PBXBuildFile section */
@@ -64,10 +69,15 @@
 		9FA8B12023707B260005DDCA /* createTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createTaskViewController.swift; sourceTree = "<group>"; };
 		9FA8B1222370AA8E0005DDCA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9FBC3A1A2378EB5100976713 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		9FCE4A8B2522E91A00260063 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		9FCE4AA9252376AD00260063 /* eventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = eventTableViewCell.swift; sourceTree = "<group>"; };
+		9FCE4AAC2524378E00260063 /* settingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settingsViewController.swift; sourceTree = "<group>"; };
+		9FDB1B2A25815B8A00C4F996 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9FE592A5251D523800C8CC5D /* newsServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newsServices.swift; sourceTree = "<group>"; };
 		9FE592A8251E84BF00C8CC5D /* newsStoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newsStoryTableViewCell.swift; sourceTree = "<group>"; };
 		9FE592C6252122FD00C8CC5D /* webViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = webViewController.swift; sourceTree = "<group>"; };
 		9FE592C925213DFB00C8CC5D /* dateCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dateCollectionViewCell.swift; sourceTree = "<group>"; };
+		9FE592CC252190E500C8CC5D /* newEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newEventViewController.swift; sourceTree = "<group>"; };
 		9FFE549923BFF890004554EA /* userServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = userServices.swift; sourceTree = "<group>"; };
 		9FFE549B23BFF899004554EA /* user.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = user.swift; sourceTree = "<group>"; };
 		ABD058866FA0D101BB57761B /* Pods_lifeApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_lifeApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -119,6 +129,7 @@
 				9F97255E236FFD5C00616E7D /* taskTableViewCell.swift */,
 				9FE592A8251E84BF00C8CC5D /* newsStoryTableViewCell.swift */,
 				9FE592C925213DFB00C8CC5D /* dateCollectionViewCell.swift */,
+				9FCE4AA9252376AD00260063 /* eventTableViewCell.swift */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -178,6 +189,8 @@
 				9F8866EA24F44F22007C5C72 /* taskDetailViewController.swift */,
 				9F86BA8424F6BBFE0043B5D6 /* newTaskViewController.swift */,
 				9FE592C6252122FD00C8CC5D /* webViewController.swift */,
+				9FE592CC252190E500C8CC5D /* newEventViewController.swift */,
+				9FCE4AAC2524378E00260063 /* settingsViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -187,6 +200,7 @@
 			children = (
 				9F972560236FFD7900616E7D /* task.swift */,
 				9FFE549B23BFF899004554EA /* user.swift */,
+				9FCE4A8B2522E91A00260063 /* Event.swift */,
 			);
 			path = Modals;
 			sourceTree = "<group>";
@@ -209,6 +223,7 @@
 				9F9633C52501CE6400CFF8BF /* extensions.swift */,
 				9F9633C72501E8F100CFF8BF /* weatherServices.swift */,
 				9FE592A5251D523800C8CC5D /* newsServices.swift */,
+				9FDB1B2A25815B8A00C4F996 /* Constants.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -334,12 +349,15 @@
 				9F97254B236FE99700616E7D /* scheduleViewController.swift in Sources */,
 				9F972549236FE99700616E7D /* mindViewController.swift in Sources */,
 				9FE592CA25213DFB00C8CC5D /* dateCollectionViewCell.swift in Sources */,
+				9FDB1B2B25815B8A00C4F996 /* Constants.swift in Sources */,
+				9FE592CD252190E500C8CC5D /* newEventViewController.swift in Sources */,
 				9F972561236FFD7900616E7D /* task.swift in Sources */,
 				9FFE549A23BFF890004554EA /* userServices.swift in Sources */,
 				9FE592C7252122FD00C8CC5D /* webViewController.swift in Sources */,
 				9F9633C62501CE6400CFF8BF /* extensions.swift in Sources */,
 				9FE592A6251D523800C8CC5D /* newsServices.swift in Sources */,
 				9FFE549C23BFF899004554EA /* user.swift in Sources */,
+				9FCE4A8C2522E91A00260063 /* Event.swift in Sources */,
 				9F9633C82501E8F100CFF8BF /* weatherServices.swift in Sources */,
 				9FBC3A1B2378EB5100976713 /* Utilities.swift in Sources */,
 				9F440120237140B5007FBBF7 /* tabViewController.swift in Sources */,
@@ -350,9 +368,11 @@
 				9F3D52402370E4DA00B8FAC0 /* createAccountViewController.swift in Sources */,
 				9F97255D236FEA2800616E7D /* toDoViewController.swift in Sources */,
 				9F972547236FE99700616E7D /* SceneDelegate.swift in Sources */,
+				9FCE4AAA252376AD00260063 /* eventTableViewCell.swift in Sources */,
 				9FA8B12123707B260005DDCA /* createTaskViewController.swift in Sources */,
 				9F86BA8524F6BBFE0043B5D6 /* newTaskViewController.swift in Sources */,
 				9F3D523B2370CAA800B8FAC0 /* splashScreenViewController.swift in Sources */,
+				9FCE4AAD2524378E00260063 /* settingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

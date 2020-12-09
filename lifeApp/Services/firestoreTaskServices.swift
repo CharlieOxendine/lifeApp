@@ -14,7 +14,7 @@ class firestoreTaskServices {
     
     static let shared = firestoreTaskServices()
     
-    //MARK: TASKS
+    // MARK: EVENTS MANAGMENT
     //Returns string error desc if not successful
     func markTaskDone(taskID: String, completion: @escaping (String?) -> ()) {
         let db = Firestore.firestore()
@@ -41,6 +41,7 @@ class firestoreTaskServices {
         }
     }
     
+    //Returns string error desc if not successful
     func addTaskToDB(newTask: task, completion: @escaping (String?) -> ()) {
         let db = Firestore.firestore()
         
@@ -54,5 +55,74 @@ class firestoreTaskServices {
             completion(error.localizedDescription)
         }
         
+    }
+    
+    // MARK: EVENTS MANAGMENT
+    //notifies user of error desc in this function if not successful and completion nil
+    func addEventToDB(newEvent: Event, completion: @escaping (String?) -> ()) {
+        let db = Firestore.firestore()
+        
+        do {
+            try db.collection("users").document(_userServices.shared.currentUser.uid).collection("events").document(newEvent.eventID).setData(from: newEvent)
+            completion(nil)
+        } catch let error {
+            print("Error writing city to Firestore: \(error)")
+            completion(error.localizedDescription)
+        }
+    }
+    
+    func getEventsInMonth(vc: UIViewController, month: Int, year: Int, completion: @escaping ([Event]) -> ()) {
+        let db = Firestore.firestore()
+        var eventsLoaded: [Event] = []
+        
+        let dateString = "5/\(month + 1)/\(year)"
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        let refDate = dateFormatter.date(from: dateString)
+        
+        guard refDate != nil else { return }
+        
+        db.collection("users").document(_userServices.shared.currentUser.uid).collection("events").whereField("startTime", isGreaterThan: refDate!.startOfMonth).whereField("startTime", isLessThan: refDate!.endOfMonth).getDocuments { (snap, err) in
+            if err != nil {
+                Utilities.errMessage(message: err!.localizedDescription, view: vc)
+                return
+            }
+            
+            guard snap != nil else { return }
+            
+            for doc in snap!.documents {
+                let result = Result {
+                    try doc.data(as: Event.self)
+                }
+                
+                switch result {
+                    case .success(let event):
+                        if let event = event {
+                            print("Event: \(event)")
+                            eventsLoaded.append(event)
+                        } else {
+                            Utilities.errMessage(message: "Document does not exist", view: vc)
+                        }
+                    case .failure(let error):
+                        Utilities.errMessage(message: "Error decoding city: \(error)", view: vc)
+                }
+            }
+            
+            _userServices.shared.currentUser.todayEvents = eventsLoaded.filter { Calendar.current.compare(Date(), to: $0.startTime, toGranularity: .day) == ComparisonResult.orderedSame}
+            completion(eventsLoaded)
+        }
+    }
+    
+    func updateTheme(vc: UIViewController, newColorCode: Int, completion: @escaping () -> ()) {
+        
+        let db = Firestore.firestore()
+        db.collection("users").document(_userServices.shared.currentUser.uid).updateData(["themeColor" : newColorCode]) { (err) in
+            if err != nil {
+                Utilities.errMessage(message: err!.localizedDescription, view: vc)
+                return
+            }
+            
+            completion()
+        }
     }
 }

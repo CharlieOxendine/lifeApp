@@ -14,8 +14,10 @@ class user {
     
     var uid: String!
     var tasks: [task] = []
+    var todayEvents: [Event] = []
     var name: String?
-    
+    var themeColor: Int = 0
+        
     func setUser(vc: UIViewController, userUID: String, completion: @escaping (Bool) -> ()) {
         self.uid = userUID
         
@@ -23,12 +25,14 @@ class user {
         db.collection("users").document(self.uid).getDocument { (snap, err) in
             if err != nil {
                 Utilities.errMessage(message: err!.localizedDescription, view: vc)
-                completion(false)
                 return
             }
             
             let userName = snap?.data()?["name"] as? String
+            let theme = snap?.data()?["themeColor"] as? Int
+            
             self.name = userName ?? nil
+            self.themeColor = theme ?? self.themeColor
             completion(true)
         }
     }
