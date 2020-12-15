@@ -149,7 +149,7 @@ extension toDoViewController: UITableViewDelegate, UITableViewDataSource, taskTa
             let deleteAction = UIContextualAction(style: .normal, title: "Delete") { (action, sourceView, completionHandler) in
                 let alert = UIAlertController(title: "Are you sure?", message: "Are you sure you want to delete this task?", preferredStyle: .alert)
                 let yes = UIAlertAction(title: "Delete", style: .default) { (action) in
-                    firestoreTaskServices.shared.deleteTask(taskID: currentTask.id!) { (err) in
+                    firestoreServices.shared.deleteTask(taskID: currentTask.id!) { (err) in
                         if err != nil {
                             Utilities.errMessage(message: err!, view: self)
                             return
@@ -193,7 +193,7 @@ extension toDoViewController: UITableViewDelegate, UITableViewDataSource, taskTa
             let deleteAction = UIContextualAction(style: .normal, title: "Delete") { (action, sourceView, completionHandler) in
                 let alert = UIAlertController(title: "Are you sure?", message: "Are you sure you want to delete this task?", preferredStyle: .alert)
                 let yes = UIAlertAction(title: "Delete", style: .default) { (action) in
-                    firestoreTaskServices.shared.deleteTask(taskID: currentTask.id!) { (err) in
+                    firestoreServices.shared.deleteTask(taskID: currentTask.id!) { (err) in
                         if err != nil {
                             Utilities.errMessage(message: err!, view: self)
                             return

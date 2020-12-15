@@ -42,47 +42,63 @@ class settingsViewController: UIViewController {
     }
     
     @IBAction func color1Tapped(_ sender: Any) {
-        firestoreTaskServices.shared.updateTheme(vc: self, newColorCode: 0) {
+        firestoreServices.shared.updateTheme(vc: self, newColorCode: 0) {
             _userServices.shared.currentUser.themeColor = 0
             self.delegate?.updatedThemeColor()
         }
     }
     
     @IBAction func color2Tapped(_ sender: Any) {
-        firestoreTaskServices.shared.updateTheme(vc: self, newColorCode: 1) {
+        firestoreServices.shared.updateTheme(vc: self, newColorCode: 1) {
             _userServices.shared.currentUser.themeColor = 1
             self.delegate?.updatedThemeColor()
         }
     }
     
     @IBAction func color3Tapped(_ sender: Any) {
-        firestoreTaskServices.shared.updateTheme(vc: self, newColorCode: 2) {
+        firestoreServices.shared.updateTheme(vc: self, newColorCode: 2) {
             _userServices.shared.currentUser.themeColor = 2
             self.delegate?.updatedThemeColor()
         }
     }
     
     @IBAction func color4Tapped(_ sender: Any) {
-        firestoreTaskServices.shared.updateTheme(vc: self, newColorCode: 3) {
+        firestoreServices.shared.updateTheme(vc: self, newColorCode: 3) {
             _userServices.shared.currentUser.themeColor = 3
             self.delegate?.updatedThemeColor()
         }
     }
     
     @IBAction func color5Tapped(_ sender: Any) {
-        firestoreTaskServices.shared.updateTheme(vc: self, newColorCode: 4) {
+        firestoreServices.shared.updateTheme(vc: self, newColorCode: 4) {
             _userServices.shared.currentUser.themeColor = 4
             self.delegate?.updatedThemeColor()
         }
     }
     
     @IBAction func color6Tapped(_ sender: Any) {
-        firestoreTaskServices.shared.updateTheme(vc: self, newColorCode: 5) {
+        firestoreServices.shared.updateTheme(vc: self, newColorCode: 5) {
             _userServices.shared.currentUser.themeColor = 5
             self.delegate?.updatedThemeColor()
         }
     }
     
+    @IBAction func logOutTapped(_ sender: Any) {
+        let alert = UIAlertController(title: "Are you sure?", message: "Are you sure you would like to log out?", preferredStyle: .alert)
+        let yes = UIAlertAction(title: "Log out", style: .default) { (action) in
+            _userServices.shared.logOutUser()
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let newVC = storyboard.instantiateViewController(identifier: "root") as? splashScreenViewController
+            newVC?.modalPresentationStyle = .fullScreen
+            self.present(newVC!, animated: true)
+        }
+        
+        let no = UIAlertAction(title: "No", style: .default)
+        
+        alert.addAction(yes)
+        alert.addAction(no)
+        self.present(alert, animated: true)
+    }
 }
 
 enum themeColor: Int {

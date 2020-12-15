@@ -10,14 +10,15 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-class firestoreTaskServices {
+class firestoreServices {
     
-    static let shared = firestoreTaskServices()
+    static let shared = firestoreServices()
+    
+    let db = Firestore.firestore()
     
     // MARK: EVENTS MANAGMENT
     //Returns string error desc if not successful
     func markTaskDone(taskID: String, completion: @escaping (String?) -> ()) {
-        let db = Firestore.firestore()
         db.collection("users").document(_userServices.shared.currentUser.uid).collection("tasks").document(taskID).updateData(["completed" : true]) { (err) in
             if err != nil {
                 completion(err!.localizedDescription)
@@ -30,7 +31,6 @@ class firestoreTaskServices {
     
     //Returns string error desc if not successful
     func deleteTask(taskID: String, completion: @escaping (String?) -> ()) {
-        let db = Firestore.firestore()
         db.collection("users").document(_userServices.shared.currentUser.uid).collection("tasks").document(taskID).delete { (err) in
             if err != nil {
                 completion(err!.localizedDescription)
@@ -43,8 +43,6 @@ class firestoreTaskServices {
     
     //Returns string error desc if not successful
     func addTaskToDB(newTask: task, completion: @escaping (String?) -> ()) {
-        let db = Firestore.firestore()
-        
         guard _userServices.shared.currentUser.uid != nil else { return }
         
         do {
@@ -60,8 +58,6 @@ class firestoreTaskServices {
     // MARK: EVENTS MANAGMENT
     //notifies user of error desc in this function if not successful and completion nil
     func addEventToDB(newEvent: Event, completion: @escaping (String?) -> ()) {
-        let db = Firestore.firestore()
-        
         do {
             try db.collection("users").document(_userServices.shared.currentUser.uid).collection("events").document(newEvent.eventID).setData(from: newEvent)
             completion(nil)
@@ -72,7 +68,6 @@ class firestoreTaskServices {
     }
     
     func getEventsInMonth(vc: UIViewController, month: Int, year: Int, completion: @escaping ([Event]) -> ()) {
-        let db = Firestore.firestore()
         var eventsLoaded: [Event] = []
         
         let dateString = "5/\(month + 1)/\(year)"
@@ -115,7 +110,6 @@ class firestoreTaskServices {
     
     func updateTheme(vc: UIViewController, newColorCode: Int, completion: @escaping () -> ()) {
         
-        let db = Firestore.firestore()
         db.collection("users").document(_userServices.shared.currentUser.uid).updateData(["themeColor" : newColorCode]) { (err) in
             if err != nil {
                 Utilities.errMessage(message: err!.localizedDescription, view: vc)
@@ -123,6 +117,18 @@ class firestoreTaskServices {
             }
             
             completion()
+        }
+    }
+    
+    func updateNotifTime(timeToNotify: String, completion: @escaping () -> ()) {
+        guard let UID = _userServices.shared.currentUser.uid else {
+            return
+        }
+
+        db.collection("users").document(UID).updateData(["notifTime" : timeToNotify]) { (err) in
+            if err == nil {
+                completion()
+            } 
         }
     }
 }

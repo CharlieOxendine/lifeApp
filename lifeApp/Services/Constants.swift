@@ -10,5 +10,7 @@ import Foundation
 
 class Constants {
     
+    static let shared = Constants()
+    let revenueCatKey = "YDRXtGukiyNNEAbJxaBfpFLSQIcLlcyV"
     
 }

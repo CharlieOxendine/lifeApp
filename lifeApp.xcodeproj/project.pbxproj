@@ -11,9 +11,12 @@
 		9F3D523B2370CAA800B8FAC0 /* splashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3D523A2370CAA800B8FAC0 /* splashScreenViewController.swift */; };
 		9F3D523E2370E4CF00B8FAC0 /* loginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3D523D2370E4CF00B8FAC0 /* loginViewController.swift */; };
 		9F3D52402370E4DA00B8FAC0 /* createAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3D523F2370E4DA00B8FAC0 /* createAccountViewController.swift */; };
+		9F3E003025884E000098640B /* notifsOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3E002F25884E000098640B /* notifsOnboardingViewController.swift */; };
+		9F3EFFCE2587BCAE0098640B /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F3EFFCD2587BCAE0098640B /* StoreKit.framework */; };
+		9F3EFFEF2587C2560098640B /* upgradePlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3EFFEE2587C2560098640B /* upgradePlanViewController.swift */; };
 		9F440120237140B5007FBBF7 /* tabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F44011F237140B5007FBBF7 /* tabViewController.swift */; };
 		9F86BA8524F6BBFE0043B5D6 /* newTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F86BA8424F6BBFE0043B5D6 /* newTaskViewController.swift */; };
-		9F8866E924F44DAA007C5C72 /* firestoreTaskServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8866E824F44DAA007C5C72 /* firestoreTaskServices.swift */; };
+		9F8866E924F44DAA007C5C72 /* firestoreServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8866E824F44DAA007C5C72 /* firestoreServices.swift */; };
 		9F8866EB24F44F22007C5C72 /* taskDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8866EA24F44F22007C5C72 /* taskDetailViewController.swift */; };
 		9F9633C62501CE6400CFF8BF /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9633C52501CE6400CFF8BF /* extensions.swift */; };
 		9F9633C82501E8F100CFF8BF /* weatherServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9633C72501E8F100CFF8BF /* weatherServices.swift */; };
@@ -48,9 +51,12 @@
 		9F3D523A2370CAA800B8FAC0 /* splashScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = splashScreenViewController.swift; sourceTree = "<group>"; };
 		9F3D523D2370E4CF00B8FAC0 /* loginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loginViewController.swift; sourceTree = "<group>"; };
 		9F3D523F2370E4DA00B8FAC0 /* createAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createAccountViewController.swift; sourceTree = "<group>"; };
+		9F3E002F25884E000098640B /* notifsOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = notifsOnboardingViewController.swift; sourceTree = "<group>"; };
+		9F3EFFCD2587BCAE0098640B /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		9F3EFFEE2587C2560098640B /* upgradePlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = upgradePlanViewController.swift; sourceTree = "<group>"; };
 		9F44011F237140B5007FBBF7 /* tabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tabViewController.swift; sourceTree = "<group>"; };
 		9F86BA8424F6BBFE0043B5D6 /* newTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newTaskViewController.swift; sourceTree = "<group>"; };
-		9F8866E824F44DAA007C5C72 /* firestoreTaskServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = firestoreTaskServices.swift; sourceTree = "<group>"; };
+		9F8866E824F44DAA007C5C72 /* firestoreServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = firestoreServices.swift; sourceTree = "<group>"; };
 		9F8866EA24F44F22007C5C72 /* taskDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = taskDetailViewController.swift; sourceTree = "<group>"; };
 		9F9633C52501CE6400CFF8BF /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
 		9F9633C72501E8F100CFF8BF /* weatherServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = weatherServices.swift; sourceTree = "<group>"; };
@@ -90,6 +96,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				71BE59286BCDDD2EDCE33994 /* Pods_lifeApp.framework in Frameworks */,
+				9F3EFFCE2587BCAE0098640B /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,6 +115,7 @@
 		75E7954E401F6523919FD8AE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9F3EFFCD2587BCAE0098640B /* StoreKit.framework */,
 				ABD058866FA0D101BB57761B /* Pods_lifeApp.framework */,
 			);
 			name = Frameworks;
@@ -191,6 +199,8 @@
 				9FE592C6252122FD00C8CC5D /* webViewController.swift */,
 				9FE592CC252190E500C8CC5D /* newEventViewController.swift */,
 				9FCE4AAC2524378E00260063 /* settingsViewController.swift */,
+				9F3EFFEE2587C2560098640B /* upgradePlanViewController.swift */,
+				9F3E002F25884E000098640B /* notifsOnboardingViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -219,7 +229,7 @@
 			children = (
 				9FBC3A1A2378EB5100976713 /* Utilities.swift */,
 				9FFE549923BFF890004554EA /* userServices.swift */,
-				9F8866E824F44DAA007C5C72 /* firestoreTaskServices.swift */,
+				9F8866E824F44DAA007C5C72 /* firestoreServices.swift */,
 				9F9633C52501CE6400CFF8BF /* extensions.swift */,
 				9F9633C72501E8F100CFF8BF /* weatherServices.swift */,
 				9FE592A5251D523800C8CC5D /* newsServices.swift */,
@@ -346,6 +356,7 @@
 			files = (
 				9F97255F236FFD5C00616E7D /* taskTableViewCell.swift in Sources */,
 				9F8866EB24F44F22007C5C72 /* taskDetailViewController.swift in Sources */,
+				9F3EFFEF2587C2560098640B /* upgradePlanViewController.swift in Sources */,
 				9F97254B236FE99700616E7D /* scheduleViewController.swift in Sources */,
 				9F972549236FE99700616E7D /* mindViewController.swift in Sources */,
 				9FE592CA25213DFB00C8CC5D /* dateCollectionViewCell.swift in Sources */,
@@ -361,8 +372,9 @@
 				9F9633C82501E8F100CFF8BF /* weatherServices.swift in Sources */,
 				9FBC3A1B2378EB5100976713 /* Utilities.swift in Sources */,
 				9F440120237140B5007FBBF7 /* tabViewController.swift in Sources */,
+				9F3E003025884E000098640B /* notifsOnboardingViewController.swift in Sources */,
 				9F3D523E2370E4CF00B8FAC0 /* loginViewController.swift in Sources */,
-				9F8866E924F44DAA007C5C72 /* firestoreTaskServices.swift in Sources */,
+				9F8866E924F44DAA007C5C72 /* firestoreServices.swift in Sources */,
 				9FE592A9251E84BF00C8CC5D /* newsStoryTableViewCell.swift in Sources */,
 				9F972545236FE99700616E7D /* AppDelegate.swift in Sources */,
 				9F3D52402370E4DA00B8FAC0 /* createAccountViewController.swift in Sources */,
@@ -524,7 +536,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = Charlie.lifeApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cc.structLife;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -543,7 +555,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = Charlie.lifeApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cc.structLife;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

@@ -9,6 +9,7 @@
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
+import Purchases
 
 class loginViewController: UIViewController {
 
@@ -55,13 +56,17 @@ class loginViewController: UIViewController {
                     Utilities.errMessage(message: err!.localizedDescription, view: self)
                 } else {
                 
+                    Purchases.debugLogsEnabled = true
+                    Purchases.configure(withAPIKey: Constants.shared.revenueCatKey, appUserID: Auth.auth().currentUser!.uid)
+                    
                     self.currentUserUID = (authData?.user.uid)!
                     let userUID = self.currentUserUID
                     _userServices.shared.setUser(vc: self, uid: userUID) {
                         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                        let newVC = storyboard.instantiateViewController(identifier: "tabBarControl") as! tabViewController
-                        newVC.userUID = self.currentUserUID
-                        self.present(newVC, animated: true)
+                        let newVC = storyboard.instantiateViewController(identifier: "tabBarControl") as? tabViewController
+                        newVC?.selectedIndex = 1
+                        newVC?.userUID = self.currentUserUID
+                        self.present(newVC!, animated: true)
                     }
                 }
             }

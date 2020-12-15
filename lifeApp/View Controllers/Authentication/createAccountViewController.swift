@@ -20,6 +20,9 @@ class createAccountViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.addGestureRecognizer(UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:))))
+        
         formatView()
     }
     
@@ -57,7 +60,6 @@ class createAccountViewController: UIViewController {
         let validate = validateFields()
 
         if validate == nil {
-            //authenticate
             let auth = Auth.auth()
             auth.createUser(withEmail: email!, password: password!) { (authData, err) in
                 if err != nil {
@@ -71,8 +73,8 @@ class createAccountViewController: UIViewController {
                     
                     _userServices.shared.setUser(vc: self, uid: uid) {
                         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                        let newVC = storyboard.instantiateViewController(identifier: "tabBarControl") as! tabViewController
-                        newVC.userUID = authData!.user.uid
+                        let newVC = storyboard.instantiateViewController(identifier: "notifTime") as! notifsOnboardingViewController
+                        newVC.uid = uid
                         self.present(newVC, animated: true)
                     }
                 }
@@ -80,5 +82,9 @@ class createAccountViewController: UIViewController {
         } else {
             Utilities.errMessage(message: validate!, view: self)
         }
+    }
+    
+    @IBAction func backTapped(_ sender: Any) {
+        self.dismiss(animated: true)
     }
 }

@@ -88,7 +88,7 @@ class taskTableViewCell: UITableViewCell {
     @IBAction func completeTapped(_ sender: Any) {
         
         guard self.currentTask != nil else { return }
-        firestoreTaskServices.shared.markTaskDone(taskID: self.currentTask!.id) { (err) in
+        firestoreServices.shared.markTaskDone(taskID: self.currentTask!.id) { (err) in
             if err != nil {
                 return
             }

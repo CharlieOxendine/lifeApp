@@ -118,7 +118,7 @@ class scheduleViewController: UIViewController {
         self.todaysEvents = []
         self.monthEvents = []
         
-        firestoreTaskServices.shared.getEventsInMonth(vc: self, month: month ?? self.currentMonthIndex!, year: self.currentYear!) { (events) in
+        firestoreServices.shared.getEventsInMonth(vc: self, month: month ?? self.currentMonthIndex!, year: self.currentYear!) { (events) in
             self.monthEvents = events
             self.eventsTable.reloadData()
         }
@@ -238,7 +238,6 @@ class scheduleViewController: UIViewController {
             }
         }
     }
-    
 }
 
 extension scheduleViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -253,9 +252,19 @@ extension scheduleViewController: UICollectionViewDelegate, UICollectionViewData
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dayCell", for: indexPath) as! dateCollectionViewCell
+        
+        let today = Date()
+        let selectedDay = self.daysArray[indexPath.row]
+        self.currentDayIndex = selectedDay
+        let calanderDate = Calendar.current.dateComponents([.day, .year, .month], from: today)
+
         cell.contentView.layer.cornerRadius = cell.frame.height/2
-        print(indexPath.row)
         cell.setCell(day: self.daysArray[indexPath.row])
+        
+        if self.currentDayIndex! == calanderDate.day && calanderDate.year == self.currentYear! && calanderDate.month == self.currentMonthIndex! + 1 {
+            cell.contentView.backgroundColor = .lightGray
+        }
+        
         return cell
     }
     

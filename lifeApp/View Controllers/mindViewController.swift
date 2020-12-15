@@ -9,6 +9,7 @@
 import UIKit
 import FirebaseFirestore
 import MapKit
+import Purchases
 
 class mindViewController: UIViewController {
 
@@ -51,6 +52,7 @@ class mindViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        //checkUser()
         setTheme()
         self.setDayAtGlance()
     }
@@ -81,6 +83,19 @@ class mindViewController: UIViewController {
         }
     }
     
+    func checkUser() {
+        Purchases.shared.purchaserInfo { (purchaserInfo, error) in
+            if purchaserInfo?.entitlements.all["pro-access"]?.isActive == true {
+                print("[PURCHASES] - User entitlement is active")
+            } else {
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let newVC = storyboard.instantiateViewController(identifier: "purchases") as? upgradePlanViewController
+                newVC?.modalPresentationStyle = .fullScreen
+                self.present(newVC!, animated: true)
+            }
+        }
+    }
+    
     func setDayAtGlance() {
         let today = Date()
         let calanderDate = Calendar.current.dateComponents([.day, .year, .month], from: today)
@@ -88,7 +103,7 @@ class mindViewController: UIViewController {
         let year = calanderDate.year
         let day = calanderDate.day
         
-        firestoreTaskServices.shared.getEventsInMonth(vc: self, month: month! - 1, year: year!) { (events) in
+        firestoreServices.shared.getEventsInMonth(vc: self, month: month! - 1, year: year!) { (events) in
             self.dayEvents = _userServices.shared.currentUser.todayEvents
             self.todayTasks = _userServices.shared.currentUser.tasks.filter { Calendar.current.compare(Date(), to: $0.dueDate.dateValue(), toGranularity: .day) == ComparisonResult.orderedSame }
             
@@ -287,7 +302,7 @@ extension mindViewController: UITableViewDelegate, UITableViewDataSource {
                     let yes = UIAlertAction(title: "Delete", style: .default) { (action) in
                         let index = indexPath.row - self.dayEvents.count
                         let currentTask = self.todayTasks[index]
-                        firestoreTaskServices.shared.deleteTask(taskID: currentTask.id!) { (err) in
+                        firestoreServices.shared.deleteTask(taskID: currentTask.id!) { (err) in
                             if err != nil {
                                 Utilities.errMessage(message: err!, view: self)
                                 return

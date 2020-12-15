@@ -100,7 +100,7 @@ class newEventViewController: UIViewController {
         if desc != "" { desc = nil }
         
         let event = Event(eventTitle: self.eventTitleField.text, eventDesc: desc, startTime: self.startTime, endTime: self.endTime, isAllDay: self.allDaySwitch.isOn, eventID: UUID().uuidString)
-        firestoreTaskServices.shared.addEventToDB(newEvent: event) { (err) in
+        firestoreServices.shared.addEventToDB(newEvent: event) { (err) in
             if err != nil {
                 Utilities.errMessage(message: err!, view: self)
                 return

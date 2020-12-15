@@ -53,7 +53,7 @@ class newTaskViewController: UIViewController {
         
         let newTask = task(date: Timestamp(date: Date()), title: newTitle, notes: newNote ?? "", dueDate: Timestamp(date: self.dueDatePicker.date), completed: false, id: id)
         
-        firestoreTaskServices.shared.addTaskToDB(newTask: newTask) { (err) in
+        firestoreServices.shared.addTaskToDB(newTask: newTask) { (err) in
             if err != nil {
                 Utilities.errMessage(message: err!, view: self)
                 return
