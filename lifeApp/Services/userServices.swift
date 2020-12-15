@@ -15,6 +15,9 @@ class _userServices {
     static var shared = _userServices()
     var currentUser = user()
     
+    var notifsEnabled: Bool?
+    var notifsTime: String?
+    
     func setUser(vc: UIViewController?, uid: String, completion: @escaping () -> ()) {
         currentUser.setUser(vc: vc ?? UIViewController(), userUID: uid) { (success) in
             if success == true {
@@ -26,10 +29,10 @@ class _userServices {
     }
     
     /// Removes user object from memory and returns bool indicating success
-    func logOutUser() -> Bool {
+    func logOutUser() {
         self.currentUser = user()
+        self.notifsEnabled = false
         try? Auth.auth().signOut()
-        return true
     }
     
 }

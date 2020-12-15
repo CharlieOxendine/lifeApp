@@ -43,8 +43,8 @@ class scheduleViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        self.monthCollection.reloadData()
         setTheme()
+        setCurrentMonth()
     }
     
     func setTheme() {
@@ -67,15 +67,18 @@ class scheduleViewController: UIViewController {
     }
     
     func setCurrentMonth() {
-        let today = Date()
-        let calanderDate = Calendar.current.dateComponents([.day, .year, .month], from: today)
-        let month = calanderDate.month
-        let year = calanderDate.year
-        let day = calanderDate.day
+        let currentDate = Date()
         
-        if month != nil { self.currentMonthIndex = month! - 1 }
-        if year != nil { self.currentYear = year }
-        if day != nil { self.currentDayIndex = day! + 1 }
+        if self.currentDayIndex == nil {
+            let calanderDate = Calendar.current.dateComponents([.day, .year, .month], from: currentDate)
+            let month = calanderDate.month
+            let year = calanderDate.year
+            let day = calanderDate.day
+            
+            if month != nil { self.currentMonthIndex = month! - 1 }
+            if year != nil { self.currentYear = year }
+            if day != nil { self.currentDayIndex = day! + 1 }
+        }
         
         setDays()
         
@@ -108,6 +111,7 @@ class scheduleViewController: UIViewController {
                 print("Not working")
         }
         
+        self.monthCollection.reloadData()
         getData(month: self.currentMonthIndex)
     }
     
@@ -120,6 +124,12 @@ class scheduleViewController: UIViewController {
         
         firestoreServices.shared.getEventsInMonth(vc: self, month: month ?? self.currentMonthIndex!, year: self.currentYear!) { (events) in
             self.monthEvents = events
+            
+            let today = Date()
+            let calanderDate = Calendar.current.dateComponents([.day, .year, .month], from: today)
+            let day = calanderDate.day
+            self.todaysEvents = events.filter { Calendar.current.dateComponents([.day, .year, .month], from: $0.startTime).day == day }
+            
             self.eventsTable.reloadData()
         }
     }
@@ -163,9 +173,11 @@ class scheduleViewController: UIViewController {
             self.daysArray.append(n)
         }
     }
+    
     @IBAction func addEvent(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let newVC = storyboard.instantiateViewController(withIdentifier: "newEvent") as! newEventViewController
+        newVC.delegate = self
         self.present(newVC, animated: true)
     }
     
@@ -278,7 +290,7 @@ extension scheduleViewController: UICollectionViewDelegate, UICollectionViewData
         if self.currentDayIndex! == calanderDate.day && calanderDate.year == self.currentYear! && calanderDate.month == self.currentMonthIndex! + 1 {
             self.eventsListTitleLbl.text = "Today's Events"
         } else {
-            self.eventsListTitleLbl.text = "Events(\(self.currentDayIndex!)/\(self.currentMonthIndex! + 1)/\(self.currentYear!))"
+            self.eventsListTitleLbl.text = "\(self.currentDayIndex!)/\(self.currentMonthIndex! + 1)/\(self.currentYear!)"
         }
         
         let currentCell = collectionView.cellForItem(at: indexPath)
@@ -307,6 +319,14 @@ extension scheduleViewController: UITableViewDelegate, UITableViewDataSource {
         let currentEvent = self.todaysEvents[indexPath.row]
         cell.setCell(event: currentEvent)
         return cell
+    }
+    
+}
+
+extension scheduleViewController: newEventViewControllerDelegate {
+    
+    func didAddEvent() {
+        self.viewDidAppear(true)
     }
     
 }

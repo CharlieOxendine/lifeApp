@@ -27,7 +27,6 @@ class newTaskViewController: UIViewController {
         
         view.addGestureRecognizer(UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:))))
 
-        
         setUI()
     }
     

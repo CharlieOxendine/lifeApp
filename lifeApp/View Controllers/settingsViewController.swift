@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
 class settingsViewController: UIViewController {
 
@@ -16,6 +17,11 @@ class settingsViewController: UIViewController {
     @IBOutlet weak var color4Button: UIButton!
     @IBOutlet weak var color5Button: UIButton!
     @IBOutlet weak var color6Button: UIButton!
+    
+    @IBOutlet weak var reminderTimePicker: UIDatePicker!
+    @IBOutlet weak var pushNotifsEnabledSwitch: UISwitch!
+    
+    var activityIndicatorObject: NVActivityIndicatorView?
     
     var color1 = UIColor.darkGray
     var color2 = UIColor(red: 255, green: 68, blue: 112, alpha: 1)
@@ -39,46 +45,78 @@ class settingsViewController: UIViewController {
         self.color4Button.layer.cornerRadius = 15
         self.color5Button.layer.cornerRadius = 15
         self.color6Button.layer.cornerRadius = 15
+            
+        let dateFormatter = DateFormatter()
+         dateFormatter.dateFormat = "HH:mm"
+
+        if _userServices.shared.notifsTime != nil {
+            self.reminderTimePicker.date = dateFormatter.date(from: _userServices.shared.notifsTime!) ?? Date()
+        }
+        
+        self.pushNotifsEnabledSwitch.isOn = _userServices.shared.notifsEnabled ?? true
+    }
+    
+    func setLoadingIndicator() {
+        let center = self.view.center
+        let rect = CGRect(x: center.x - 30, y: center.y - 30, width: 60, height: 60)
+        
+        let indicator = NVActivityIndicatorView(frame: rect, type: .circleStrokeSpin, color: .white)
+        indicator.backgroundColor = .darkGray
+        indicator.layer.cornerRadius = 15
+        self.activityIndicatorObject = indicator
+        self.view.addSubview(indicator)
     }
     
     @IBAction func color1Tapped(_ sender: Any) {
+        self.activityIndicatorObject?.startAnimating()
         firestoreServices.shared.updateTheme(vc: self, newColorCode: 0) {
             _userServices.shared.currentUser.themeColor = 0
+            self.activityIndicatorObject?.stopAnimating()
             self.delegate?.updatedThemeColor()
         }
     }
     
     @IBAction func color2Tapped(_ sender: Any) {
+        self.activityIndicatorObject?.startAnimating()
         firestoreServices.shared.updateTheme(vc: self, newColorCode: 1) {
             _userServices.shared.currentUser.themeColor = 1
+            self.activityIndicatorObject?.stopAnimating()
             self.delegate?.updatedThemeColor()
         }
     }
     
     @IBAction func color3Tapped(_ sender: Any) {
+        self.activityIndicatorObject?.startAnimating()
         firestoreServices.shared.updateTheme(vc: self, newColorCode: 2) {
             _userServices.shared.currentUser.themeColor = 2
+            self.activityIndicatorObject?.stopAnimating()
             self.delegate?.updatedThemeColor()
         }
     }
     
     @IBAction func color4Tapped(_ sender: Any) {
+        self.activityIndicatorObject?.startAnimating()
         firestoreServices.shared.updateTheme(vc: self, newColorCode: 3) {
             _userServices.shared.currentUser.themeColor = 3
+            self.activityIndicatorObject?.stopAnimating()
             self.delegate?.updatedThemeColor()
         }
     }
     
     @IBAction func color5Tapped(_ sender: Any) {
+        self.activityIndicatorObject?.startAnimating()
         firestoreServices.shared.updateTheme(vc: self, newColorCode: 4) {
             _userServices.shared.currentUser.themeColor = 4
+            self.activityIndicatorObject?.stopAnimating()
             self.delegate?.updatedThemeColor()
         }
     }
     
     @IBAction func color6Tapped(_ sender: Any) {
+        self.activityIndicatorObject?.startAnimating()
         firestoreServices.shared.updateTheme(vc: self, newColorCode: 5) {
             _userServices.shared.currentUser.themeColor = 5
+            self.activityIndicatorObject?.stopAnimating()
             self.delegate?.updatedThemeColor()
         }
     }

@@ -20,6 +20,9 @@ class loginViewController: UIViewController {
     var currentUserUID = ""
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.addGestureRecognizer(UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:))))
+        
         formatView()
     }
     

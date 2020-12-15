@@ -8,6 +8,7 @@
 
 import UIKit
 import Purchases
+import NVActivityIndicatorView
 
 class upgradePlanViewController: UIViewController {
 
@@ -18,7 +19,10 @@ class upgradePlanViewController: UIViewController {
     
     @IBOutlet weak var yearlyPlanButton: UIView!
     @IBOutlet weak var monthlyPlanButton: UIView!
-        
+    @IBOutlet weak var tryItLbl: UILabel!
+    
+    var activityIndicatorObject: NVActivityIndicatorView?
+
     private var monthlyPackage: Purchases.Package?
     private var yearlyPackage: Purchases.Package?
       
@@ -30,12 +34,25 @@ class upgradePlanViewController: UIViewController {
         getCurrentStatus()
         noSubscriptionSetup()
         
+        setLoadingIndicator()
+        
         setUI()
     }
 
     func setUI() {
         self.monthlyPlanButton.layer.cornerRadius = 20
         self.yearlyPlanButton.layer.cornerRadius = 20
+    }
+    
+    func setLoadingIndicator() {
+        let center = self.view.center
+        let rect = CGRect(x: center.x - 30, y: center.y - 30, width: 60, height: 60)
+        
+        let indicator = NVActivityIndicatorView(frame: rect, type: .circleStrokeSpin, color: .white)
+        indicator.backgroundColor = .darkGray
+        indicator.layer.cornerRadius = 15
+        self.activityIndicatorObject = indicator
+        self.view.addSubview(indicator)
     }
     
     func getCurrentStatus() {
@@ -65,28 +82,39 @@ class upgradePlanViewController: UIViewController {
         self.currentPlanLbl.isHidden = true
         self.currentPlanIndicator.isHidden = true
         self.upgradeCallToActionLbl.isHidden = false
+        self.tryItLbl.isHidden = false
     }
     
     func activeSubscriptionSetup() {
         self.currentPlanLbl.isHidden = false
         self.currentPlanIndicator.isHidden = false
         self.upgradeCallToActionLbl.isHidden = true
+        self.tryItLbl.isHidden = true
     }
     
     @IBAction func yearlyTapped(_ sender: Any) {
+        self.activityIndicatorObject?.startAnimating()
         guard self.yearlyPackage != nil else { return }
         Purchases.shared.purchasePackage(self.yearlyPackage!) { (transaction, purchaserInfo, err, userCancelled) in
+            self.activityIndicatorObject?.stopAnimating()
             if purchaserInfo?.entitlements.all["pro-access"]?.isActive == true {
-                print("Worked")
+                self.dismiss(animated: true)
             }
         }
     }
     
     @IBAction func monthlyTapped(_ sender: Any) {
+        self.activityIndicatorObject?.startAnimating()
+        self.monthlyPlanButton.isUserInteractionEnabled = false
+        self.yearlyPlanButton.isUserInteractionEnabled = false
+        
         guard self.monthlyPackage != nil else { return }
         Purchases.shared.purchasePackage(self.monthlyPackage!) { (transaction, purchaserInfo, err, userCancelled) in
+            self.activityIndicatorObject?.stopAnimating()
+            self.monthlyPlanButton.isUserInteractionEnabled = true
+            self.yearlyPlanButton.isUserInteractionEnabled = true
             if purchaserInfo?.entitlements.all["pro-access"]?.isActive == true {
-                self.dismiss(animated: true) 
+                self.dismiss(animated: true)
             }
         }
     }

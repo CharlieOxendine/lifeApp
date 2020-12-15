@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol newEventViewControllerDelegate: AnyObject {
+    func didAddEvent()
+}
+
 class newEventViewController: UIViewController {
 
     @IBOutlet weak var datePicker: UIDatePicker!
@@ -19,6 +23,8 @@ class newEventViewController: UIViewController {
     @IBOutlet weak var instructLBL: UILabel!
     @IBOutlet weak var allDaySwitch: UISwitch!
     
+    var delegate: newEventViewControllerDelegate?
+    
     var startTime: Date?
     var endTime: Date?
     
@@ -29,7 +35,6 @@ class newEventViewController: UIViewController {
         
         view.addGestureRecognizer(UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:))))
 
-        
         setUI()
     }
 
@@ -106,6 +111,7 @@ class newEventViewController: UIViewController {
                 return
             }
             
+            self.delegate?.didAddEvent()
             self.dismiss(animated: true, completion: nil)
         }
     }

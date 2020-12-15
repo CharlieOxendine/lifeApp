@@ -125,10 +125,22 @@ class firestoreServices {
             return
         }
 
-        db.collection("users").document(UID).updateData(["notifTime" : timeToNotify]) { (err) in
+        db.collection("users").document(UID).updateData(["notifTime" : timeToNotify, "notifsEnabled": true]) { (err) in
             if err == nil {
                 completion()
             } 
+        }
+    }
+    
+    func updateNotifsEnabled(enabled: Bool, completion: @escaping () -> ()) {
+        guard let UID = _userServices.shared.currentUser.uid else {
+            return
+        }
+
+        db.collection("users").document(UID).updateData(["notifsEnabled": enabled]) { (err) in
+            if err == nil {
+                completion()
+            }
         }
     }
 }

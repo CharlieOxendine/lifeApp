@@ -22,6 +22,9 @@ class mindViewController: UIViewController {
     @IBOutlet weak var weatherIMG: UIImageView!
     @IBOutlet weak var settingsButton: UIButton!
     
+    @IBOutlet weak var dayGlanceHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var lowerContentView: UIView!
+    
     var currentLoc: CLLocation?
     var locationManager: CLLocationManager!
     var topStories: [newsStoryObject] = []
@@ -36,6 +39,9 @@ class mindViewController: UIViewController {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
+        
+        self.lowerContentView.layer.cornerRadius = 25
+        self.lowerContentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         self.newsTable.delegate = self
         self.newsTable.dataSource = self
@@ -199,6 +205,40 @@ class mindViewController: UIViewController {
         self.present(newVC, animated: true)
     }
     
+    var dayGlanceOpenStatus: Bool? = false
+    @IBAction func openDayAtGlanceTapped(_ sender: Any) {
+        if dayGlanceOpenStatus == false {
+            self.dayGlanceHeightConstraint.constant = 500
+            UIView.animate(withDuration: 0.5) {
+                self.view.layoutIfNeeded()
+                self.dayGlanceOpenStatus = true
+            }
+        } else {
+            self.dayGlanceHeightConstraint.constant = 200
+            UIView.animate(withDuration: 0.5) {
+                self.view.layoutIfNeeded()
+                self.dayGlanceOpenStatus = false
+            }
+        }
+    }
+    
+    var newsOpenStatus: Bool? = false
+    @IBAction func openNewsTapped(_ sender: Any) {
+        if newsOpenStatus == false {
+            self.dayGlanceHeightConstraint.constant = 1
+            UIView.animate(withDuration: 0.5) {
+                self.view.layoutIfNeeded()
+                self.newsOpenStatus = true
+                self.dayGlanceOpenStatus = false
+            }
+        } else {
+            self.dayGlanceHeightConstraint.constant = 200
+            UIView.animate(withDuration: 0.5) {
+                self.view.layoutIfNeeded()
+                self.newsOpenStatus = false
+            }
+        }
+    }
 }
 
 extension mindViewController: CLLocationManagerDelegate {

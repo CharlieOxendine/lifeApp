@@ -127,6 +127,7 @@
 				9F3D523A2370CAA800B8FAC0 /* splashScreenViewController.swift */,
 				9F3D523D2370E4CF00B8FAC0 /* loginViewController.swift */,
 				9F3D523F2370E4DA00B8FAC0 /* createAccountViewController.swift */,
+				9F3E002F25884E000098640B /* notifsOnboardingViewController.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -200,7 +201,6 @@
 				9FE592CC252190E500C8CC5D /* newEventViewController.swift */,
 				9FCE4AAC2524378E00260063 /* settingsViewController.swift */,
 				9F3EFFEE2587C2560098640B /* upgradePlanViewController.swift */,
-				9F3E002F25884E000098640B /* notifsOnboardingViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
