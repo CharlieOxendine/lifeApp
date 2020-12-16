@@ -18,6 +18,8 @@ class _userServices {
     var notifsEnabled: Bool?
     var notifsTime: String?
     
+    var darkmodeEnabled: Bool?
+    
     func setUser(vc: UIViewController?, uid: String, completion: @escaping () -> ()) {
         currentUser.setUser(vc: vc ?? UIViewController(), userUID: uid) { (success) in
             if success == true {

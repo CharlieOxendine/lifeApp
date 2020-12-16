@@ -290,7 +290,7 @@ extension scheduleViewController: UICollectionViewDelegate, UICollectionViewData
         if self.currentDayIndex! == calanderDate.day && calanderDate.year == self.currentYear! && calanderDate.month == self.currentMonthIndex! + 1 {
             self.eventsListTitleLbl.text = "Today's Events"
         } else {
-            self.eventsListTitleLbl.text = "\(self.currentDayIndex!)/\(self.currentMonthIndex! + 1)/\(self.currentYear!)"
+            self.eventsListTitleLbl.text = "\(self.currentMonthIndex! + 1)/\(self.currentDayIndex!)/\(self.currentYear!)"
         }
         
         let currentCell = collectionView.cellForItem(at: indexPath)
@@ -321,6 +321,13 @@ extension scheduleViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 70
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 }
 
 extension scheduleViewController: newEventViewControllerDelegate {

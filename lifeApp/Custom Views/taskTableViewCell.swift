@@ -49,7 +49,7 @@ class taskTableViewCell: UITableViewCell {
                 attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
             self.titleLabel.attributedText = attributeString
             
-            let filledImage = UIImage(systemName: "circle.fill")
+            let filledImage = UIImage(systemName: "checkmark.square.fill")
             self.markCompleteIndicator.setImage(filledImage, for: .normal)
         
         }
@@ -86,16 +86,33 @@ class taskTableViewCell: UITableViewCell {
     }
     
     @IBAction func completeTapped(_ sender: Any) {
-        
         guard self.currentTask != nil else { return }
-        firestoreServices.shared.markTaskDone(taskID: self.currentTask!.id) { (err) in
-            if err != nil {
-                return
-            }
-            
-            self.delegate?.reloadData()
-        }
         
+        if self.currentTask!.completed == true {
+            firestoreServices.shared.markTaskCompletionStatus(completed: false, taskID: self.currentTask!.id) { (err) in
+                if err != nil {
+                    return
+                }
+                
+                self.titleLabel.attributedText = nil
+                self.titleLabel.text = self.currentTask!.title
+                self.markCompleteIndicator.setImage(UIImage(systemName: "square"), for: .normal)
+                self.currentTask?.completed = false
+            }
+        } else {
+            firestoreServices.shared.markTaskCompletionStatus(completed: true, taskID: self.currentTask!.id) { (err) in
+                if err != nil {
+                    return
+                }
+                
+                let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: self.currentTask!.title)
+                    attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
+                self.titleLabel.attributedText = attributeString
+                
+                self.markCompleteIndicator.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
+                self.currentTask?.completed = true
+            }
+        }
     }
     
 }

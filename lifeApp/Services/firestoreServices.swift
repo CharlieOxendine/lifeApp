@@ -18,8 +18,9 @@ class firestoreServices {
     
     // MARK: EVENTS MANAGMENT
     //Returns string error desc if not successful
-    func markTaskDone(taskID: String, completion: @escaping (String?) -> ()) {
-        db.collection("users").document(_userServices.shared.currentUser.uid).collection("tasks").document(taskID).updateData(["completed" : true]) { (err) in
+    func markTaskCompletionStatus(completed: Bool, taskID: String, completion: @escaping (String?) -> ()) {
+        db.collection("users").document(_userServices.shared.currentUser.uid).collection("tasks").document(taskID).updateData(["completed" : completed
+        ]) { (err) in
             if err != nil {
                 completion(err!.localizedDescription)
                 return

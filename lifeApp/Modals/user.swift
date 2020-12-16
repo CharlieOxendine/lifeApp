@@ -37,6 +37,7 @@ class user {
         }
     }
     
+    // MARK: Move this to firestore services 
     func getTasks(completion: @escaping (Bool?) -> ()) {
         let db = Firestore.firestore()
         db.collection("users").document(self.uid).collection("tasks").getDocuments { (snap, err) in

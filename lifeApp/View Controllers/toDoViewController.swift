@@ -120,6 +120,19 @@ extension toDoViewController: UITableViewDelegate, UITableViewDataSource, taskTa
     // MARK: Did select row
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        var currentTask: task!
+        if tableView == self.todayTableView {
+            currentTask = self.todayTasks[indexPath.row]
+        } else {
+            currentTask = self.tasks[indexPath.row]
+        }
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let newVC = storyboard.instantiateViewController(withIdentifier: "taskDetail") as! taskDetailViewController
+        newVC.delegate = self
+        newVC.currentTask = currentTask
+        newVC.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+        self.present(newVC, animated: true, completion: nil)
         return
     }
     
@@ -131,21 +144,6 @@ extension toDoViewController: UITableViewDelegate, UITableViewDataSource, taskTa
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         if tableView == weekTableView {
             let currentTask = self.tasks[indexPath.row]
-            let detailView = UIContextualAction(style: .destructive, title: "Details") { (action, sourceView, completionHandler) in
-                let currentTask: task!
-                if tableView == self.todayTableView {
-                    currentTask = self.todayTasks[indexPath.row]
-                } else {
-                    currentTask = self.tasks[indexPath.row]
-                }
-                
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let newVC = storyboard.instantiateViewController(withIdentifier: "taskDetail") as! taskDetailViewController
-                newVC.delegate = self
-                newVC.currentTaskID = currentTask.id
-                self.present(newVC, animated: true, completion: nil)
-            }
-          
             let deleteAction = UIContextualAction(style: .normal, title: "Delete") { (action, sourceView, completionHandler) in
                 let alert = UIAlertController(title: "Are you sure?", message: "Are you sure you want to delete this task?", preferredStyle: .alert)
                 let yes = UIAlertAction(title: "Delete", style: .default) { (action) in
@@ -167,29 +165,14 @@ extension toDoViewController: UITableViewDelegate, UITableViewDataSource, taskTa
             }
             
             deleteAction.backgroundColor = .red
-            detailView.backgroundColor = .darkGray
             
-            let swipeActionConfig = UISwipeActionsConfiguration(actions: [detailView, deleteAction])
+            let swipeActionConfig = UISwipeActionsConfiguration(actions: [deleteAction])
             swipeActionConfig.performsFirstActionWithFullSwipe = false
             return swipeActionConfig
         } else {
             
             let currentTask = self.todayTasks[indexPath.row]
-            let detailView = UIContextualAction(style: .destructive, title: "Details") { (action, sourceView, completionHandler) in
-                let currentTask: task!
-                if tableView == self.todayTableView {
-                    currentTask = self.todayTasks[indexPath.row]
-                } else {
-                    currentTask = self.tasks[indexPath.row]
-                }
-                
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let newVC = storyboard.instantiateViewController(withIdentifier: "taskDetail") as! taskDetailViewController
-                newVC.delegate = self
-                newVC.currentTaskID = currentTask.id
-                self.present(newVC, animated: true, completion: nil)
-            }
-            
+        
             let deleteAction = UIContextualAction(style: .normal, title: "Delete") { (action, sourceView, completionHandler) in
                 let alert = UIAlertController(title: "Are you sure?", message: "Are you sure you want to delete this task?", preferredStyle: .alert)
                 let yes = UIAlertAction(title: "Delete", style: .default) { (action) in
@@ -211,9 +194,8 @@ extension toDoViewController: UITableViewDelegate, UITableViewDataSource, taskTa
             }
             
             deleteAction.backgroundColor = .red
-            detailView.backgroundColor = .darkGray
             
-            let swipeActionConfig = UISwipeActionsConfiguration(actions: [detailView, deleteAction])
+            let swipeActionConfig = UISwipeActionsConfiguration(actions: [deleteAction])
             swipeActionConfig.performsFirstActionWithFullSwipe = false
             return swipeActionConfig
             

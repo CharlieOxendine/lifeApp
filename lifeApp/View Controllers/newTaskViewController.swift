@@ -31,6 +31,9 @@ class newTaskViewController: UIViewController {
     }
     
     func setUI() {
+        Utilities.styleTextField(self.taskTitleField)
+        Utilities.styleTextField(self.notesField)
+        
         self.createTaskButton.layer.cornerRadius = 15
         
         self.dueDatePicker.datePickerMode = .date
@@ -38,7 +41,7 @@ class newTaskViewController: UIViewController {
     }
     
     @IBAction func createTaskTapped(_ sender: Any) {
-        guard self.taskTitleField.text != nil else {
+        guard self.taskTitleField.text != nil && self.taskTitleField.text?.trimmingCharacters(in: .whitespacesAndNewlines) != "" else {
             Utilities.errMessage(message: "Please give your task a title.", view: self)
             return
         }

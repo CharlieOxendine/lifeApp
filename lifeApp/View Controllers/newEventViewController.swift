@@ -135,6 +135,7 @@ extension newEventViewController: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.endEditing(true)
+        
         self.startTime = nil
         self.endTime = nil
         
