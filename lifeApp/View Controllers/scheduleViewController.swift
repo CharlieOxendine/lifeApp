@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Purchases
 
 class scheduleViewController: UIViewController {
 
@@ -175,10 +176,17 @@ class scheduleViewController: UIViewController {
     }
     
     @IBAction func addEvent(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let newVC = storyboard.instantiateViewController(withIdentifier: "newEvent") as! newEventViewController
-        newVC.delegate = self
-        self.present(newVC, animated: true)
+        Purchases.shared.purchaserInfo { (purchaserInfo, error) in
+            if purchaserInfo?.entitlements.all["pro-access"]?.isActive == true {
+                print("[PURCHASES] - User entitlement is active")
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let newVC = storyboard.instantiateViewController(withIdentifier: "newEvent") as! newEventViewController
+                newVC.delegate = self
+                self.present(newVC, animated: true)
+            } else {
+                Utilities.subscribeAlert(view: self)
+            }
+        }
     }
     
     @IBAction func nextMonth(_ sender: Any) {
@@ -327,6 +335,37 @@ extension scheduleViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let currentEvent = self.todaysEvents[indexPath.row]
+        
+        let deleteAction = UIContextualAction(style: .normal, title: "Delete") { (action, sourceView, completionHandler) in
+            let alert = UIAlertController(title: "Are you sure?", message: "Are you sure you want to delete this event?", preferredStyle: .alert)
+            let yes = UIAlertAction(title: "Delete", style: .default) { (action) in
+                firestoreServices.shared.deleteEvent(eventID: currentEvent.eventID) { (err) in
+                    if err != nil {
+                        Utilities.errMessage(message: err!, view: self)
+                        return
+                    }
+                    
+                    self.todaysEvents.removeAll(where: { $0.eventID == currentEvent.eventID })
+                    self.eventsTable.reloadData()
+                }
+            }
+            
+            let no = UIAlertAction(title: "No", style: .default)
+            
+            alert.addAction(yes)
+            alert.addAction(no)
+            self.present(alert, animated: true)
+        }
+        
+        deleteAction.backgroundColor = .red
+        
+        let swipeActionConfig = UISwipeActionsConfiguration(actions: [deleteAction])
+        swipeActionConfig.performsFirstActionWithFullSwipe = false
+        return swipeActionConfig
     }
 }
 

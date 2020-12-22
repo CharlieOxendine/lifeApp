@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseFirestore
+import Purchases
 
 class toDoViewController: UIViewController {
 
@@ -72,10 +73,17 @@ class toDoViewController: UIViewController {
     }
     
     @IBAction func newTaskTapped(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let newVC = storyboard.instantiateViewController(withIdentifier: "newTask") as! newTaskViewController
-        newVC.delegate = self
-        self.present(newVC, animated: true)
+        Purchases.shared.purchaserInfo { (purchaserInfo, error) in
+            if purchaserInfo?.entitlements.all["pro-access"]?.isActive == true {
+                print("[PURCHASES] - User entitlement is active")
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let newVC = storyboard.instantiateViewController(withIdentifier: "newTask") as! newTaskViewController
+                newVC.delegate = self
+                self.present(newVC, animated: true)
+            } else {
+                Utilities.subscribeAlert(view: self)
+            }
+        }
     }
     
 }

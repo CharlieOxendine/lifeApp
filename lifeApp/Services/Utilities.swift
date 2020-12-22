@@ -55,6 +55,20 @@ class Utilities {
         view.present(controller, animated: true)
     }
     
+    static func subscribeAlert(view: UIViewController) {
+        let controller = UIAlertController(title: "Pro Feature", message: "You must be a pro user to access this feature. Would you like to subscribe?", preferredStyle: .alert)
+        let close = UIAlertAction(title: "No", style: .default) { (true) in }
+        let subscribe = UIAlertAction(title: "Yes", style: .default) { (true) in
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let newVC = storyboard.instantiateViewController(identifier: "purchases") as? upgradePlanViewController
+            view.present(newVC!, animated: true)
+        }
+        
+        controller.addAction(close)
+        controller.addAction(subscribe)
+        view.present(controller, animated: true)
+    }
+    
     
     static func kelvinToFahrenheit(kelvin: Double) -> Double {
         let F = (( kelvin - 273.15) * 9/5) + 32

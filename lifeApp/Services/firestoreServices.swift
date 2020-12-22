@@ -144,4 +144,15 @@ class firestoreServices {
             }
         }
     }
+    
+    func deleteEvent(eventID: String, completion: @escaping (String?) -> ()) {
+        db.collection("users").document(_userServices.shared.currentUser.uid).collection("events").document(eventID).delete { (err) in
+            if err != nil {
+                completion(err!.localizedDescription)
+                return
+            }
+            
+            completion(nil)
+        }
+    }
 }

@@ -121,6 +121,13 @@ class settingsViewController: UIViewController {
         }
     }
     
+    @IBAction func termsOfServiceTapped(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let newVC = storyboard.instantiateViewController(identifier: "webView") as? webViewController
+        newVC?.webURL = URL(string: "https://www.cash-campus.com/struct-app-terms")
+        self.present(newVC!, animated: true)
+    }
+    
     @IBAction func logOutTapped(_ sender: Any) {
         let alert = UIAlertController(title: "Are you sure?", message: "Are you sure you would like to log out?", preferredStyle: .alert)
         let yes = UIAlertAction(title: "Log out", style: .default) { (action) in

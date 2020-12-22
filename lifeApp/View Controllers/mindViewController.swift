@@ -26,6 +26,8 @@ class mindViewController: UIViewController {
     @IBOutlet weak var dayGlanceHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var lowerContentView: UIView!
     
+    @IBOutlet weak var noEventsTodayIndicator: UILabel!
+    
     var currentLoc: CLLocation?
     var locationManager: CLLocationManager!
     var topStories: [newsStoryObject] = []
@@ -49,9 +51,7 @@ class mindViewController: UIViewController {
               
         self.todayAtGlanceTable.dataSource = self
         self.todayAtGlanceTable.delegate = self
-        
-        setDayAtGlance()
-        
+                
         getWeatherData()
         getNewsData()
         formatView()
@@ -59,7 +59,7 @@ class mindViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        //checkUser()
+        checkUser()
         setTheme()
         self.setDayAtGlance()
         self.checkTimeOfDay()
@@ -98,7 +98,6 @@ class mindViewController: UIViewController {
             } else {
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let newVC = storyboard.instantiateViewController(identifier: "purchases") as? upgradePlanViewController
-                newVC?.modalPresentationStyle = .fullScreen
                 self.present(newVC!, animated: true)
             }
         }
@@ -109,31 +108,29 @@ class mindViewController: UIViewController {
         let calanderDate = Calendar.current.dateComponents([.day, .year, .month], from: today)
         let month = calanderDate.month
         let year = calanderDate.year
-        let day = calanderDate.day
         
         firestoreServices.shared.getEventsInMonth(vc: self, month: month! - 1, year: year!) { (events) in
             self.dayEvents = _userServices.shared.currentUser.todayEvents
             self.todayTasks = _userServices.shared.currentUser.tasks.filter { Calendar.current.compare(Date(), to: $0.dueDate.dateValue(), toGranularity: .day) == ComparisonResult.orderedSame }
             
-            self.todayAtGlanceTable.reloadData()
-        }
-        
-        _userServices.shared.currentUser.getTasks { (success) in
-            if success == true {
-                self.todayTasks = []
-                
-                let today = Date()
-        
-                for task in _userServices.shared.currentUser.tasks {
+            _userServices.shared.currentUser.getTasks { (success) in
+                if success == true {
+                    self.todayTasks = []
                     
-                    let dueDate = task.dueDate.dateValue()
-                    
-                    if (Calendar.current.isDateInToday(task.dueDate.dateValue())) {
-                        self.todayTasks.append(task)
+                    for task in _userServices.shared.currentUser.tasks {
+                        if (Calendar.current.isDateInToday(task.dueDate.dateValue())) {
+                            self.todayTasks.append(task)
+                        }
                     }
+                    
+                    if self.todayTasks.isEmpty == true && _userServices.shared.currentUser.todayEvents.isEmpty == true {
+                        self.noEventsTodayIndicator.isHidden = false
+                    } else {
+                        self.noEventsTodayIndicator.isHidden = true
+                    }
+                    
+                    self.todayAtGlanceTable.reloadData()
                 }
-                
-                self.todayAtGlanceTable.reloadData()
             }
         }
     }
@@ -233,6 +230,7 @@ class mindViewController: UIViewController {
             UIView.animate(withDuration: 0.5) {
                 self.view.layoutIfNeeded()
                 self.dayGlanceOpenStatus = true
+                self.noEventsTodayIndicator.transform = CGAffineTransform(translationX: 0, y: 0)
             }
         } else {
             self.dayGlanceHeightConstraint.constant = 200
@@ -251,12 +249,18 @@ class mindViewController: UIViewController {
                 self.view.layoutIfNeeded()
                 self.newsOpenStatus = true
                 self.dayGlanceOpenStatus = false
+                UIView.animate(withDuration: 0.5) {
+                    self.noEventsTodayIndicator.transform = CGAffineTransform(translationX: 500, y: 0)
+                }
             }
         } else {
             self.dayGlanceHeightConstraint.constant = 200
             UIView.animate(withDuration: 0.5) {
                 self.view.layoutIfNeeded()
                 self.newsOpenStatus = false
+                UIView.animate(withDuration: 0.5) {
+                    self.noEventsTodayIndicator.transform = CGAffineTransform(translationX: 0, y: 0)
+                }
             }
         }
     }

@@ -21,6 +21,11 @@ class createAccountViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.nameField.delegate = self
+        self.emailField.delegate = self
+        self.passwordField.delegate = self
+        self.passwordVerifyField.delegate = self
+        
         view.addGestureRecognizer(UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:))))
         
         formatView()
@@ -73,9 +78,10 @@ class createAccountViewController: UIViewController {
                     
                     _userServices.shared.setUser(vc: self, uid: uid) {
                         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                        let newVC = storyboard.instantiateViewController(identifier: "notifTime") as! notifsOnboardingViewController
-                        newVC.uid = uid
-                        self.present(newVC, animated: true)
+                        let newVC = storyboard.instantiateViewController(identifier: "tabBarControl") as? tabViewController
+                        newVC?.selectedIndex = 1
+                        newVC?.userUID = uid
+                        self.present(newVC!, animated: true)
                     }
                 }
             }
@@ -87,4 +93,30 @@ class createAccountViewController: UIViewController {
     @IBAction func backTapped(_ sender: Any) {
         self.dismiss(animated: true)
     }
+}
+
+extension createAccountViewController: UITextFieldDelegate {
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField == self.emailField {
+            UIView.animate(withDuration: 0.5) {
+                self.view.transform = CGAffineTransform(translationX: 0, y: -15)
+            }
+        } else if textField == self.passwordField {
+            UIView.animate(withDuration: 0.5) {
+                self.view.transform = CGAffineTransform(translationX: 0, y: -80)
+            }
+        } else if textField == self.passwordVerifyField {
+            UIView.animate(withDuration: 0.5) {
+                self.view.transform = CGAffineTransform(translationX: 0, y: -120)
+            }
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 0.5) {
+            self.view.transform = CGAffineTransform(translationX: 0, y: 0)
+        }
+    }
+    
 }

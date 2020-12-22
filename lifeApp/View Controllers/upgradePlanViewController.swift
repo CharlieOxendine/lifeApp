@@ -21,6 +21,9 @@ class upgradePlanViewController: UIViewController {
     @IBOutlet weak var monthlyPlanButton: UIView!
     @IBOutlet weak var tryItLbl: UILabel!
     
+    @IBOutlet var gestureRecognizers: UITapGestureRecognizer!
+    @IBOutlet var yearlyRecognizer: UITapGestureRecognizer!
+    
     var activityIndicatorObject: NVActivityIndicatorView?
 
     private var monthlyPackage: Purchases.Package?
@@ -79,6 +82,8 @@ class upgradePlanViewController: UIViewController {
     }
     
     func noSubscriptionSetup() {
+        self.gestureRecognizers.isEnabled = true
+        self.yearlyRecognizer.isEnabled = true
         self.currentPlanLbl.isHidden = true
         self.currentPlanIndicator.isHidden = true
         self.upgradeCallToActionLbl.isHidden = false
@@ -86,6 +91,8 @@ class upgradePlanViewController: UIViewController {
     }
     
     func activeSubscriptionSetup() {
+        self.gestureRecognizers.isEnabled = false
+        self.yearlyRecognizer.isEnabled = false
         self.currentPlanLbl.isHidden = false
         self.currentPlanIndicator.isHidden = false
         self.upgradeCallToActionLbl.isHidden = true
