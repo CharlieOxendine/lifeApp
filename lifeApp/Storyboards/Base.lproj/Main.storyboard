@@ -654,11 +654,14 @@
                                             <constraint firstItem="OMC-Np-nDa" firstAttribute="centerX" secondItem="SMr-Ft-aZL" secondAttribute="centerX" id="UBw-se-a8J"/>
                                             <constraint firstAttribute="bottom" secondItem="OMC-Np-nDa" secondAttribute="bottom" constant="5" id="avd-MI-us6"/>
                                         </constraints>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="z4i-Kx-wQv" appends="YES" id="SWQ-rV-Edr"/>
+                                        </connections>
                                     </view>
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DDF-0I-3rb">
-                                <rect key="frame" x="119.5" y="758" width="175" height="40"/>
+                                <rect key="frame" x="119.5" y="738" width="175" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="175" id="RrA-sC-0vA"/>
                                     <constraint firstAttribute="height" constant="40" id="kzF-ec-SKl"/>
@@ -671,9 +674,15 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MaH-NL-l5y">
-                                <rect key="frame" x="25" y="419.5" width="364" height="61"/>
-                                <string key="text">Psst...try it for a week risk free! You have to cancel before the end of the trial period or we will charge you for a subscription</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <rect key="frame" x="25" y="394.5" width="364" height="84"/>
+                                <string key="text">Try it for a week before buying. Within 24 hours of the end of the 7 day trial, we will automatically charge you iTunes account. You can manage and cancel your subscriptions in your iTunes Account settings at any time.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Each iTunes account is allowed only one free trial. After this, if you resubsribe, it will start charging immediately." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P14-1k-9Vk">
+                                <rect key="frame" x="30" y="493.5" width="354" height="50.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -683,14 +692,27 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NJ5-WF-IKp">
+                                <rect key="frame" x="107" y="778" width="200" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="Terms of Service/Privacy Info">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="termsTapped:" destination="Hcl-23-ZNW" eventType="touchUpInside" id="vDi-TW-507"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="2Fv-T2-Pf9"/>
                         <color key="backgroundColor" red="0.16078431369999999" green="0.16078431369999999" blue="0.16078431369999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="NJ5-WF-IKp" firstAttribute="centerX" secondItem="qyU-xD-yTf" secondAttribute="centerX" id="2bH-Ua-L5z"/>
                             <constraint firstItem="MaH-NL-l5y" firstAttribute="centerX" secondItem="qyU-xD-yTf" secondAttribute="centerX" id="87l-J0-4qt"/>
                             <constraint firstItem="2Fv-T2-Pf9" firstAttribute="trailing" secondItem="AkX-mS-KL3" secondAttribute="trailing" constant="20" id="FMx-2r-eHX"/>
+                            <constraint firstItem="DDF-0I-3rb" firstAttribute="top" relation="greaterThanOrEqual" secondItem="P14-1k-9Vk" secondAttribute="bottom" constant="10" id="FRR-S3-cRz"/>
+                            <constraint firstItem="P14-1k-9Vk" firstAttribute="leading" secondItem="qyU-xD-yTf" secondAttribute="leading" constant="30" id="Igg-sL-e7Z"/>
                             <constraint firstItem="2Fv-T2-Pf9" firstAttribute="trailing" secondItem="MaH-NL-l5y" secondAttribute="trailing" constant="25" id="KTh-4h-fa2"/>
-                            <constraint firstItem="MaH-NL-l5y" firstAttribute="top" secondItem="AkX-mS-KL3" secondAttribute="bottom" constant="50" id="Ljr-t8-wMw"/>
+                            <constraint firstItem="MaH-NL-l5y" firstAttribute="top" secondItem="AkX-mS-KL3" secondAttribute="bottom" constant="25" id="Ljr-t8-wMw"/>
                             <constraint firstItem="AkX-mS-KL3" firstAttribute="leading" secondItem="2Fv-T2-Pf9" secondAttribute="leading" constant="20" id="Mx6-T1-9dz"/>
                             <constraint firstItem="DDF-0I-3rb" firstAttribute="centerX" secondItem="qyU-xD-yTf" secondAttribute="centerX" id="TBJ-cj-MVA"/>
                             <constraint firstItem="fso-Ru-GeA" firstAttribute="top" secondItem="HQv-if-UUd" secondAttribute="bottom" constant="30" id="Xfb-ZN-2fS"/>
@@ -701,10 +723,13 @@
                             <constraint firstItem="MaH-NL-l5y" firstAttribute="leading" secondItem="2Fv-T2-Pf9" secondAttribute="leading" constant="25" id="bA7-6d-ajF"/>
                             <constraint firstItem="fuO-vv-FXS" firstAttribute="top" secondItem="HQv-if-UUd" secondAttribute="bottom" constant="25" id="ciS-LQ-8sZ"/>
                             <constraint firstItem="fuO-vv-FXS" firstAttribute="leading" secondItem="2Fv-T2-Pf9" secondAttribute="leading" constant="30" id="hYr-PW-nMo"/>
+                            <constraint firstItem="P14-1k-9Vk" firstAttribute="top" secondItem="MaH-NL-l5y" secondAttribute="bottom" constant="15" id="iMx-9c-52z"/>
+                            <constraint firstItem="2Fv-T2-Pf9" firstAttribute="bottom" secondItem="NJ5-WF-IKp" secondAttribute="bottom" id="loD-jK-EA7"/>
                             <constraint firstItem="HQv-if-UUd" firstAttribute="top" secondItem="2Fv-T2-Pf9" secondAttribute="top" constant="80" id="mhN-TS-0Ib"/>
-                            <constraint firstItem="2Fv-T2-Pf9" firstAttribute="bottom" secondItem="DDF-0I-3rb" secondAttribute="bottom" constant="10" id="mk5-n4-bBr"/>
                             <constraint firstItem="HQv-if-UUd" firstAttribute="leading" secondItem="2Fv-T2-Pf9" secondAttribute="leading" constant="20" id="q0X-a1-HER"/>
                             <constraint firstItem="2Fv-T2-Pf9" firstAttribute="trailing" secondItem="fuO-vv-FXS" secondAttribute="trailing" constant="30" id="rVu-1d-5VC"/>
+                            <constraint firstItem="NJ5-WF-IKp" firstAttribute="top" secondItem="DDF-0I-3rb" secondAttribute="bottom" id="svR-UB-Cq3"/>
+                            <constraint firstAttribute="trailing" secondItem="P14-1k-9Vk" secondAttribute="trailing" constant="30" id="v7a-id-p9D"/>
                             <constraint firstItem="AkX-mS-KL3" firstAttribute="top" secondItem="fso-Ru-GeA" secondAttribute="bottom" constant="70" id="whC-2i-FX8"/>
                         </constraints>
                     </view>

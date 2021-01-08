@@ -125,6 +125,12 @@ class upgradePlanViewController: UIViewController {
             }
         }
     }
+    @IBAction func termsTapped(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let newVC = storyboard.instantiateViewController(identifier: "webView") as? webViewController
+        newVC?.webURL = URL(string: "https://www.cash-campus.com/struct-app-terms")
+        self.present(newVC!, animated: true)
+    }
     
     @IBAction func restorePurchasesTapped(_ sender: Any) {
         Purchases.shared.restoreTransactions { (purchaserInfo, error) in
