@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>824162082123-7mqr4qd6nglj06rlnsddniqjm6ogl6lj.apps.googleusercontent.com</string>
+	<string>SENSATIVE INFO PLACEHOLDER</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.824162082123-7mqr4qd6nglj06rlnsddniqjm6ogl6lj</string>
+	<string>SENSATIVE INFO PLACEHOLDER</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDhohueWF3X1Ss_HsRIQHnCDGA29XjdFKQ</string>
+	<string>SENSATIVE INFO PLACEHOLDER</string>
 	<key>GCM_SENDER_ID</key>
-	<string>824162082123</string>
+	<string>SENSATIVE INFO PLACEHOLDER</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>Charlie.lifeApp</string>
+	<string>SENSATIVE INFO PLACEHOLDER</string>
 	<key>PROJECT_ID</key>
-	<string>schedule-app-9eff0</string>
+	<string>SENSATIVE INFO PLACEHOLDER</string>
 	<key>STORAGE_BUCKET</key>
-	<string>schedule-app-9eff0.appspot.com</string>
+	<string>SENSATIVE INFO PLACEHOLDER</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:824162082123:ios:900aab3ce5fc0c89ee1cce</string>
+	<string>SENSATIVE INFO PLACEHOLDER</string>
 	<key>DATABASE_URL</key>
-	<string>https://schedule-app-9eff0.firebaseio.com</string>
+	<string>SENSATIVE INFO PLACEHOLDER</string>
 </dict>
 </plist>
